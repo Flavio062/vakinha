@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Search, Heart, Share, ShieldCheck, Copy, Check, Menu, X, MessageCircle, Facebook, Twitter, Link as LinkIcon } from 'lucide-react';
 
 export default function App() {
+  const [currentPage, setCurrentPage] = useState<'home' | 'payment'>('home');
   const [activeTab, setActiveTab] = useState('sobre');
   const [copiedPix, setCopiedPix] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -24,6 +25,10 @@ export default function App() {
     setDonationValue(val);
   };
 
+  if (currentPage === 'payment') {
+    return <PaymentPage onBack={() => setCurrentPage('home')} initialValue={donationValue} />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800 pb-12">
       {/* Header */}
@@ -44,7 +49,6 @@ export default function App() {
             <button className="flex items-center gap-1 text-gray-700 hover:text-green-500 transition-colors">
               Buscar <Search size={16} />
             </button>
-            <a href="#" className="hover:text-green-500 transition-colors">Login</a>
           </nav>
 
           {/* Mobile Menu Toggle */}
@@ -59,7 +63,6 @@ export default function App() {
             <a href="#" className="text-gray-700 font-medium p-2 hover:bg-gray-50 rounded-lg">Início</a>
             <a href="#" className="text-gray-700 font-medium p-2 hover:bg-gray-50 rounded-lg">Como Funciona</a>
             <a href="#" className="text-gray-700 font-medium p-2 hover:bg-gray-50 rounded-lg">Explorar</a>
-            <a href="#" className="text-gray-700 font-medium p-2 hover:bg-gray-50 rounded-lg">Login</a>
           </div>
         )}
       </header>
@@ -72,7 +75,7 @@ export default function App() {
           <div className="lg:col-span-2 space-y-6">
             {/* Hero Image */}
             <div className="relative rounded-2xl overflow-hidden aspect-video bg-gray-200 shadow-sm">
-              <img src="https://images.unsplash.com/photo-1605806616949-1e87b487cb2a?q=80&w=800&auto=format&fit=crop" alt="Deslizamento e destruição" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+              <img src="https://midias.em.com.br/_midias/jpg/2026/02/24/1200x720/1_juiz-de-fora-cemig-desmente-que-havera-interrupcao-geral-de-energia-64640530.jpeg?20260224185555?20260224185555" alt="Deslizamento e destruição" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
               <button className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2.5 rounded-full shadow-md text-gray-400 hover:text-red-500 transition-colors">
                 <Heart size={24} />
               </button>
@@ -89,11 +92,11 @@ export default function App() {
                 Nos últimos dias, fortes chuvas atingiram a cidade de Juiz de Fora, em Minas Gerais, provocando uma das maiores tragédias recentes da região. As tempestades causaram enchentes e deslizamentos de terra que deixaram centenas de famílias desabrigadas.
               </p>
               
-              {/* Mobile "Quero Ajudar" Button (Scrolls to donation card) */}
+              {/* Mobile "Quero Ajudar" Button */}
               <div className="mt-6 lg:hidden">
-                <a href="#donation-card" className="block w-full text-center bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-sm">
+                <button onClick={() => setCurrentPage('payment')} className="block w-full text-center bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-sm">
                   Quero Ajudar
-                </a>
+                </button>
               </div>
             </div>
 
@@ -140,7 +143,7 @@ export default function App() {
                       <p className="mb-4">Nos últimos dias, fortes chuvas atingiram a cidade de Juiz de Fora, em Minas Gerais, provocando uma das maiores tragédias recentes da região. As tempestades causaram enchentes e deslizamentos de terra que deixaram 19 pessoas mortas, além de centenas de famílias desabrigadas.</p>
                       <p className="mb-4">Diversos bairros foram atingidos, com casas destruídas, ruas alagadas e famílias que perderam praticamente tudo. Muitas vítimas estavam em áreas atingidas por deslizamentos, e equipes de resgate continuam trabalhando para ajudar quem foi afetado.</p>
                       
-                      <img src="https://images.unsplash.com/photo-1542082873-2199b0475308?q=80&w=800&auto=format&fit=crop" alt="Rua alagada e com lama" className="w-full rounded-xl my-6 object-cover shadow-sm" referrerPolicy="no-referrer" />
+                      <img src="https://www.otempo.com.br/content/dam/otempo/editorias/cidades/2026/2/cidades-juiz-de-fora-comerciantes--1772053247.jpeg" alt="Rua alagada e com lama" className="w-full rounded-xl my-6 object-cover shadow-sm" referrerPolicy="no-referrer" />
                       
                       <p className="mb-4">De acordo com as autoridades, mais de 440 pessoas ficaram desabrigadas, e escolas precisaram ser transformadas em abrigos temporários para acolher moradores que perderam suas casas.</p>
                       <p className="mb-4">Diante dessa situação tão difícil, criamos esta vaquinha solidária para ajudar as famílias atingidas pela tragédia. As doações arrecadadas serão destinadas para:</p>
@@ -260,7 +263,7 @@ export default function App() {
                     className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none font-bold text-gray-900 bg-gray-50 focus:bg-white transition-colors" 
                   />
                 </div>
-                <button className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200 mb-4">
+                <button onClick={() => setCurrentPage('payment')} className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200 mb-4">
                   Doar Agora
                 </button>
                 <div className="flex items-center justify-center gap-1.5 text-xs font-medium text-gray-500 bg-gray-50 py-2 rounded-lg">
@@ -342,13 +345,92 @@ export default function App() {
           </div>
           <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between text-xs">
             <p>&copy; 2026 Vaquinha Solidária. Todos os direitos reservados.</p>
-            <div className="mt-4 md:mt-0 bg-yellow-500/10 text-yellow-500 px-4 py-2 rounded-lg font-medium border border-yellow-500/20 flex items-center gap-2">
-              <ShieldCheck size={16} />
-              Página demonstrativa - Fictícia
-            </div>
           </div>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValue: string }) {
+  const [pixGenerated, setPixGenerated] = useState(false);
+  const [value, setValue] = useState(initialValue);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText('exemplo@pix.com');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="min-h-screen bg-white flex flex-col items-center py-12 px-4 font-sans text-gray-800">
+      {/* Topo */}
+      <div className="flex items-center gap-2 text-orange-500 font-bold text-xl mb-12 cursor-pointer hover:opacity-80 transition-opacity" onClick={onBack}>
+        <div className="bg-orange-500 text-white p-1.5 rounded-lg">
+          <Heart size={20} fill="currentColor" />
+        </div>
+        Vaquinha Solidária
+      </div>
+
+      {/* Título */}
+      <div className="text-center mb-10">
+        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">Obrigado por ajudar! 💛</h1>
+        <p className="text-lg text-gray-600">Finalize sua doação via PIX</p>
+      </div>
+
+      {/* Card Central */}
+      <div className="bg-white w-full max-w-md rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 p-8 mb-12">
+        {!pixGenerated ? (
+          <div className="space-y-6">
+            <div>
+              <label className="block text-sm font-bold text-gray-700 mb-2">Valor da doação</label>
+              <div className="relative">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">R$</span>
+                <input 
+                  type="number" 
+                  placeholder="Digite o valor da sua doação" 
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                  className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none font-bold text-gray-900 bg-gray-50 focus:bg-white transition-colors text-lg" 
+                />
+              </div>
+            </div>
+            <button 
+              onClick={() => setPixGenerated(true)}
+              disabled={!value || Number(value) <= 0}
+              className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-4 rounded-xl text-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200"
+            >
+              Gerar PIX
+            </button>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center space-y-6 animate-in fade-in zoom-in duration-300">
+            <div className="p-4 bg-white border-2 border-orange-100 rounded-2xl shadow-sm">
+              <img src="https://picsum.photos/250" alt="QR Code PIX" className="w-48 h-48 rounded-lg" referrerPolicy="no-referrer" />
+            </div>
+            <p className="text-center text-gray-600 font-medium">Escaneie o QR Code ou copie a chave PIX abaixo</p>
+            
+            <div className="w-full space-y-3">
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center font-mono text-gray-800 font-bold break-all">
+                exemplo@pix.com
+              </div>
+              <button 
+                onClick={handleCopy}
+                className="w-full flex items-center justify-center gap-2 bg-orange-100 hover:bg-orange-200 text-orange-700 font-bold py-3.5 rounded-xl transition-colors"
+              >
+                {copied ? <Check size={20} /> : <Copy size={20} />}
+                {copied ? 'Chave copiada com sucesso!' : 'Copiar chave PIX'}
+              </button>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Rodapé Simples */}
+      <div className="mt-auto text-center text-sm text-gray-400">
+        <p>Esta é uma página demonstrativa para fins educacionais.</p>
+      </div>
     </div>
   );
 }
