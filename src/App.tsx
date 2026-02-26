@@ -1,5 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, Heart, Share, ShieldCheck, Copy, Check, Menu, X, MessageCircle, Facebook, Twitter, Link as LinkIcon } from 'lucide-react';
+
+const DONOR_NAMES = [
+  'Henrique', 'Ana', 'Carlos', 'Mariana', 'João', 'Beatriz', 'Lucas', 'Fernanda', 
+  'Pedro', 'Juliana', 'Rafael', 'Camila', 'Bruno', 'Amanda', 'Thiago', 'Letícia', 
+  'Gabriel', 'Larissa', 'Rodrigo', 'Natália', 'Marcos', 'Aline', 'Felipe', 'Patrícia'
+];
+
+type DonationNotification = {
+  id: number;
+  name: string;
+  amount: number;
+};
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState<'home' | 'payment'>('home');
@@ -8,6 +20,39 @@ export default function App() {
   const [copiedLink, setCopiedLink] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [donationValue, setDonationValue] = useState('');
+  const [notifications, setNotifications] = useState<DonationNotification[]>([]);
+
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    const scheduleNext = (isFirst = false) => {
+      // Primeira notificação aparece rápido (5 a 10 seg) para o usuário ver que funciona.
+      // As próximas aparecem entre 1 e 5 minutos (60000 a 300000 ms) conforme solicitado.
+      const delay = isFirst 
+        ? Math.floor(Math.random() * 5000) + 5000 
+        : Math.floor(Math.random() * (300000 - 60000 + 1)) + 60000;
+
+      timeoutId = setTimeout(() => {
+        const randomName = DONOR_NAMES[Math.floor(Math.random() * DONOR_NAMES.length)];
+        const randomAmount = Math.floor(Math.random() * 50) + 1;
+        
+        const newNotif = { id: Date.now(), name: randomName, amount: randomAmount };
+        
+        setNotifications(prev => [...prev, newNotif]);
+        
+        // Remove a notificação após 5 segundos
+        setTimeout(() => {
+          setNotifications(prev => prev.filter(n => n.id !== newNotif.id));
+        }, 5000);
+
+        scheduleNext(false);
+      }, delay);
+    };
+
+    scheduleNext(true);
+
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const handleCopyPix = () => {
     navigator.clipboard.writeText('5965612@vakinha.com.br');
@@ -25,12 +70,36 @@ export default function App() {
     setDonationValue(val);
   };
 
+  const notificationsUI = (
+    <div className="fixed top-24 right-4 z-[100] flex flex-col gap-2 pointer-events-none">
+      {notifications.map(notif => (
+        <div 
+          key={notif.id} 
+          className="bg-green-500 text-white px-5 py-3 rounded-xl shadow-lg flex items-center gap-3 animate-in slide-in-from-top-8 fade-in duration-500"
+        >
+          <div className="bg-white/20 p-1.5 rounded-full">
+            <Heart size={16} fill="currentColor" />
+          </div>
+          <p className="font-medium text-sm">
+            <span className="font-bold">{notif.name}</span> doou <span className="font-bold">R$ {notif.amount},00</span>
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+
   if (currentPage === 'payment') {
-    return <PaymentPage onBack={() => setCurrentPage('home')} initialValue={donationValue} />;
+    return (
+      <>
+        {notificationsUI}
+        <PaymentPage onBack={() => setCurrentPage('home')} initialValue={donationValue} />
+      </>
+    );
   }
 
   return (
     <div className="min-h-screen bg-gray-50 font-sans text-gray-800 pb-12">
+      {notificationsUI}
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
