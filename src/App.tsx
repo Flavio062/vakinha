@@ -34,11 +34,8 @@ export default function App() {
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-green-500 font-bold text-2xl">
-            <div className="bg-green-500 text-white p-1.5 rounded-lg">
-              <Heart size={24} fill="currentColor" />
-            </div>
-            Vaquinha Solidária
+          <div className="flex items-center">
+            <img src="https://seeklogo.com/images/V/vakinha-logo-88066E3580-seeklogo.com.png" alt="Vakinha Logo" className="h-8" referrerPolicy="no-referrer" />
           </div>
           
           {/* Desktop Nav */}
@@ -317,11 +314,8 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
             <div className="col-span-1 md:col-span-2">
-              <div className="flex items-center gap-2 text-white font-bold text-xl mb-4">
-                <div className="bg-green-500 text-white p-1.5 rounded-lg">
-                  <Heart size={20} fill="currentColor" />
-                </div>
-                Vaquinha Solidária
+              <div className="flex items-center mb-4">
+                <img src="https://seeklogo.com/images/V/vakinha-logo-88066E3580-seeklogo.com.png" alt="Vakinha Logo" className="h-8 brightness-0 invert" referrerPolicy="no-referrer" />
               </div>
               <p className="text-sm mb-4 max-w-sm leading-relaxed">A maior plataforma de doações do Brasil. Juntos podemos transformar vidas e fazer a diferença na vida de quem mais precisa.</p>
             </div>
@@ -366,11 +360,8 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
   return (
     <div className="min-h-screen bg-white flex flex-col items-center py-12 px-4 font-sans text-gray-800">
       {/* Topo */}
-      <div className="flex items-center gap-2 text-orange-500 font-bold text-xl mb-12 cursor-pointer hover:opacity-80 transition-opacity" onClick={onBack}>
-        <div className="bg-orange-500 text-white p-1.5 rounded-lg">
-          <Heart size={20} fill="currentColor" />
-        </div>
-        Vaquinha Solidária
+      <div className="flex items-center mb-12 cursor-pointer hover:opacity-80 transition-opacity" onClick={onBack}>
+        <img src="https://seeklogo.com/images/V/vakinha-logo-88066E3580-seeklogo.com.png" alt="Vakinha Logo" className="h-8" referrerPolicy="no-referrer" />
       </div>
 
       {/* Título */}
