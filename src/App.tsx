@@ -166,12 +166,76 @@ export default function App() {
               <p className="text-gray-600 leading-relaxed text-lg">
                 Nos últimos dias, fortes chuvas atingiram a cidade de Juiz de Fora, em Minas Gerais, provocando uma das maiores tragédias recentes da região. As tempestades causaram enchentes e deslizamentos de terra que deixaram centenas de famílias desabrigadas.
               </p>
-              
-              {/* Mobile "Quero Ajudar" Button */}
-              <div className="mt-6 lg:hidden">
-                <button onClick={() => setCurrentPage('payment')} className="block w-full text-center bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-sm">
-                  Quero Ajudar
+            </div>
+
+            {/* Mobile Donation Card (Visible only on mobile) */}
+            <div className="lg:hidden bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
+              {/* Progress */}
+              <div className="mb-6">
+                <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden mb-4">
+                  <div className="h-full bg-green-500 rounded-full relative transition-all duration-1000 ease-out" style={{ width: `${progressPercent}%` }}>
+                    <div className="absolute right-0 top-0 bottom-0 w-4 bg-white/20 skew-x-12"></div>
+                  </div>
+                </div>
+                <p className="text-sm font-bold text-gray-500 mb-1 uppercase tracking-wide">Arrecadado</p>
+                <h2 className="text-4xl font-extrabold text-green-500 mb-1 tracking-tight">
+                  {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalRaised)}
+                </h2>
+                <p className="text-sm text-gray-500 font-medium">
+                  de {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(GOAL_AMOUNT)}
+                </p>
+              </div>
+
+              {/* Stats */}
+              <div className="bg-green-50/50 rounded-xl p-4 mb-6 space-y-3 border border-green-100/50">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-600 flex items-center gap-1.5 font-medium">Corações Recebidos <Heart size={14} className="text-green-500" fill="currentColor" /></span>
+                  <span className="font-bold text-gray-900 bg-white px-2 py-0.5 rounded shadow-sm">
+                    {new Intl.NumberFormat('pt-BR').format(totalHearts)}
+                  </span>
+                </div>
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-gray-600 font-medium">Apoiadores</span>
+                  <span className="font-bold text-gray-900 bg-white px-2 py-0.5 rounded shadow-sm">
+                    {new Intl.NumberFormat('pt-BR').format(totalSupporters)}
+                  </span>
+                </div>
+              </div>
+
+              {/* Donation Form */}
+              <div className="mb-6">
+                <h3 className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">Escolha um valor para doar</h3>
+                <div className="grid grid-cols-2 gap-2 mb-3">
+                  {['20', '50', '100', '200'].map(val => (
+                    <button 
+                      key={val} 
+                      onClick={() => handleQuickValue(val)}
+                      className={`py-2.5 border rounded-xl font-bold transition-colors ${
+                        donationValue === val 
+                          ? 'border-green-500 bg-green-50 text-green-700' 
+                          : 'border-gray-200 text-gray-600 hover:border-green-500 hover:text-green-600'
+                      }`}
+                    >
+                      R$ {val}
+                    </button>
+                  ))}
+                </div>
+                <div className="relative mb-4">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">R$</span>
+                  <input 
+                    type="number" 
+                    placeholder="Outro valor" 
+                    value={donationValue}
+                    onChange={(e) => setDonationValue(e.target.value)}
+                    className="w-full pl-12 pr-4 py-3.5 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none font-bold text-gray-900 bg-gray-50 focus:bg-white transition-colors" 
+                  />
+                </div>
+                <button onClick={() => setCurrentPage('payment')} className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-4 rounded-xl text-lg transition-colors shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200 mb-4">
+                  Doar Agora
                 </button>
+                <div className="flex items-center justify-center gap-1.5 text-xs font-medium text-gray-500 bg-gray-50 py-2 rounded-lg">
+                  <ShieldCheck size={16} className="text-green-500" /> Pagamento seguro via PIX ou Cartão
+                </div>
               </div>
             </div>
 
@@ -268,8 +332,8 @@ export default function App() {
             </div>
           </div>
 
-          {/* Right Column (Sidebar) */}
-          <div className="lg:col-span-1" id="donation-card">
+          {/* Right Column (Sidebar) - Hidden on mobile, visible on desktop */}
+          <div className="hidden lg:block lg:col-span-1" id="donation-card">
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100 sticky top-24">
               
               {/* Progress */}
