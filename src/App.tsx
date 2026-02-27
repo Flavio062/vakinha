@@ -21,6 +21,12 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [donationValue, setDonationValue] = useState('');
   const [notifications, setNotifications] = useState<DonationNotification[]>([]);
+  const [totalRaised, setTotalRaised] = useState(142000);
+  const [totalSupporters, setTotalSupporters] = useState(2184);
+  const [totalHearts, setTotalHearts] = useState(4532);
+
+  const GOAL_AMOUNT = 300000;
+  const progressPercent = Math.min((totalRaised / GOAL_AMOUNT) * 100, 100);
 
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
@@ -39,6 +45,9 @@ export default function App() {
         const newNotif = { id: Date.now(), name: randomName, amount: randomAmount };
         
         setNotifications(prev => [...prev, newNotif]);
+        setTotalRaised(prev => prev + randomAmount);
+        setTotalSupporters(prev => prev + 1);
+        setTotalHearts(prev => prev + Math.floor(Math.random() * 3) + 1);
         
         // Remove a notificação após 5 segundos
         setTimeout(() => {
@@ -266,24 +275,32 @@ export default function App() {
               {/* Progress */}
               <div className="mb-6">
                 <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden mb-4">
-                  <div className="h-full bg-green-500 rounded-full relative" style={{ width: '26%' }}>
+                  <div className="h-full bg-green-500 rounded-full relative transition-all duration-1000 ease-out" style={{ width: `${progressPercent}%` }}>
                     <div className="absolute right-0 top-0 bottom-0 w-4 bg-white/20 skew-x-12"></div>
                   </div>
                 </div>
                 <p className="text-sm font-bold text-gray-500 mb-1 uppercase tracking-wide">Arrecadado</p>
-                <h2 className="text-4xl font-extrabold text-green-500 mb-1 tracking-tight">R$ 390,50</h2>
-                <p className="text-sm text-gray-500 font-medium">de R$ 1.500,00</p>
+                <h2 className="text-4xl font-extrabold text-green-500 mb-1 tracking-tight">
+                  {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalRaised)}
+                </h2>
+                <p className="text-sm text-gray-500 font-medium">
+                  de {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(GOAL_AMOUNT)}
+                </p>
               </div>
 
               {/* Stats */}
               <div className="bg-green-50/50 rounded-xl p-4 mb-6 space-y-3 border border-green-100/50">
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-600 flex items-center gap-1.5 font-medium">Corações Recebidos <Heart size={14} className="text-green-500" fill="currentColor" /></span>
-                  <span className="font-bold text-gray-900 bg-white px-2 py-0.5 rounded shadow-sm">20</span>
+                  <span className="font-bold text-gray-900 bg-white px-2 py-0.5 rounded shadow-sm">
+                    {new Intl.NumberFormat('pt-BR').format(totalHearts)}
+                  </span>
                 </div>
                 <div className="flex justify-between items-center text-sm">
                   <span className="text-gray-600 font-medium">Apoiadores</span>
-                  <span className="font-bold text-gray-900 bg-white px-2 py-0.5 rounded shadow-sm">12</span>
+                  <span className="font-bold text-gray-900 bg-white px-2 py-0.5 rounded shadow-sm">
+                    {new Intl.NumberFormat('pt-BR').format(totalSupporters)}
+                  </span>
                 </div>
               </div>
 
