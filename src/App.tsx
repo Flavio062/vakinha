@@ -190,20 +190,6 @@ export default function App() {
               <div className="p-6">
                 {activeTab === 'sobre' && (
                   <div className="space-y-6 text-gray-700 leading-relaxed">
-                    <div className="bg-green-50 p-5 rounded-xl border border-green-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                      <div>
-                        <p className="text-sm text-green-800 mb-1">Você pode ajudar via Pix usando a chave:</p>
-                        <p className="font-bold text-green-900 text-lg">5965612@vakinha.com.br</p>
-                      </div>
-                      <button 
-                        onClick={handleCopyPix}
-                        className="flex items-center justify-center gap-2 bg-white border border-green-200 px-5 py-2.5 rounded-lg text-sm font-bold text-green-700 hover:bg-green-50 transition-colors shadow-sm"
-                      >
-                        {copiedPix ? <Check size={18} /> : <Copy size={18} />}
-                        {copiedPix ? 'Copiado!' : 'Copiar chave'}
-                      </button>
-                    </div>
-
                     <div className="prose max-w-none text-gray-600">
                       <p className="text-sm font-bold text-gray-900 mb-4">Vaquinha criada em: <span className="font-normal text-gray-600">24/02/2026</span></p>
                       <p className="mb-4">Nos últimos dias, fortes chuvas atingiram a cidade de Juiz de Fora, em Minas Gerais, provocando uma das maiores tragédias recentes da região. As tempestades causaram enchentes e deslizamentos de terra que deixaram 19 pessoas mortas, além de centenas de famílias desabrigadas.</p>
@@ -421,7 +407,7 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText('exemplo@pix.com');
+    navigator.clipboard.writeText('00020101021126810014BR.GOV.BCB.PIX2559pix-qr.mercadopago.com/instore/ol/v2/3Z92i93aNMxHrzCRfSAqN15204000053039865802BR5907vakinha6009SAO PAULO62080504mpis6304C070');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -467,13 +453,13 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
         ) : (
           <div className="flex flex-col items-center space-y-6 animate-in fade-in zoom-in duration-300">
             <div className="p-4 bg-white border-2 border-orange-100 rounded-2xl shadow-sm">
-              <img src="https://picsum.photos/250" alt="QR Code PIX" className="w-48 h-48 rounded-lg" referrerPolicy="no-referrer" />
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126810014BR.GOV.BCB.PIX2559pix-qr.mercadopago.com%2Finstore%2Fol%2Fv2%2F3Z92i93aNMxHrzCRfSAqN15204000053039865802BR5907vakinha6009SAO%20PAULO62080504mpis6304C070" alt="QR Code PIX" className="w-48 h-48 rounded-lg" referrerPolicy="no-referrer" />
             </div>
             <p className="text-center text-gray-600 font-medium">Escaneie o QR Code ou copie a chave PIX abaixo</p>
             
             <div className="w-full space-y-3">
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center font-mono text-gray-800 font-bold break-all">
-                exemplo@pix.com
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center font-mono text-gray-800 font-bold break-all text-sm">
+                00020101021126810014BR.GOV.BCB.PIX2559pix-qr.mercadopago.com/instore/ol/v2/3Z92i93aNMxHrzCRfSAqN15204000053039865802BR5907vakinha6009SAO PAULO62080504mpis6304C070
               </div>
               <button 
                 onClick={handleCopy}
