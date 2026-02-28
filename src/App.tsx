@@ -291,16 +291,6 @@ export default function App() {
                 {activeTab === 'sobre' && (
                   <div className="space-y-6 text-gray-700 leading-relaxed text-sm">
                     <div className="prose max-w-none text-gray-800">
-                      <p className="mb-2">Você pode ajudar via Pix usando a chave:</p>
-                      <div className="flex items-center gap-2 mb-6">
-                        <span className="font-bold text-gray-900">sosminas@vakinha.com.br</span>
-                        <button onClick={handleCopyPix} className="text-gray-500 hover:text-gray-700">
-                          {copiedPix ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
-                        </button>
-                      </div>
-
-                      <div className="h-px bg-gray-200 w-full mb-6"></div>
-
                       <p className="text-xs text-gray-600 mb-4">Vaquinha criada em: 24/02/2026</p>
                       
                       <h2 className="text-xl font-black text-gray-900 mb-4">SOS Minas Gerais: doe agora para vítimas das chuvas e deslizamentos.</h2>
