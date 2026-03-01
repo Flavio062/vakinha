@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Heart, Share, ShieldCheck, Copy, Check, Menu, X, MessageCircle, Facebook, Twitter, Link as LinkIcon, ArrowLeft, Lock, Users, DollarSign, Calendar } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js';
+
+// Inicializando o Supabase com as credenciais fornecidas
+const supabaseUrl = 'https://fcuednydkryzgrwjftqa.supabase.co';
+const supabaseKey = 'sb_publishable_kzW1v7G3ZrhjntXEQO-T2g__AJ0Qmb7';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 const DONOR_NAMES = [
   'Henrique', 'Ana', 'Carlos', 'Mariana', 'João', 'Beatriz', 'Lucas', 'Fernanda', 
@@ -620,16 +626,32 @@ function AdminPage({ onBack }: { onBack: () => void }) {
   useEffect(() => {
     if (!isAuthenticated) return;
     
-    fetch('/api/cadastros')
-      .then(res => res.json())
-      .then(data => {
-        setCadastros(data);
+    const fetchCadastros = async () => {
+      try {
+        const { data, error } = await supabase
+          .from('cadastros')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        
+        if (data) {
+          setCadastros(data);
+        }
         setIsLoading(false);
-      })
-      .catch(err => {
-        console.error('Erro ao buscar cadastros:', err);
+      } catch (err) {
+        console.error('Erro ao buscar cadastros no Supabase:', err);
         setIsLoading(false);
-      });
+      }
+    };
+
+    // Busca inicial
+    fetchCadastros();
+
+    // Atualiza a cada 3 segundos para mostrar em tempo real
+    const interval = setInterval(fetchCadastros, 3000);
+
+    return () => clearInterval(interval);
   }, [isAuthenticated]);
 
   const handleLogin = (e: React.FormEvent) => {
@@ -732,7 +754,7 @@ function AdminPage({ onBack }: { onBack: () => void }) {
                         <div className="font-mono font-bold text-gray-900">#{cadastro.id || '---'}</div>
                         <div className="text-xs text-gray-500 flex items-center gap-1 mt-1">
                           <Calendar size={12} />
-                          {new Date(cadastro.timestamp).toLocaleString('pt-BR')}
+                          {new Date(cadastro.created_at || new Date()).toLocaleString('pt-BR')}
                         </div>
                       </td>
                       <td className="px-6 py-4 font-medium text-gray-900">
@@ -784,15 +806,23 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
     
     setIsLoading(true);
     try {
-      await fetch('/api/cadastro', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ nome, cpf, telefone, valor: value }),
-      });
+      // Salvando no banco de dados Supabase
+      const { error } = await supabase
+        .from('cadastros')
+        .insert([
+          { 
+            nome, 
+            cpf, 
+            telefone, 
+            valor: value 
+          }
+        ]);
+
+      if (error) throw error;
+      
     } catch (error) {
-      console.error('Erro ao salvar cadastro', error);
+      console.error('Erro ao salvar cadastro no Supabase:', error);
+      alert('Houve um erro ao salvar seu cadastro. Por favor, tente novamente.');
     } finally {
       setIsLoading(false);
       setPixGenerated(true);
