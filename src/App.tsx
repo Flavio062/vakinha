@@ -7,6 +7,12 @@ const supabaseUrl = 'https://fcuednydkryzgrwjftqa.supabase.co';
 const supabaseKey = 'sb_publishable_kzW1v7G3ZrhjntXEQO-T2g__AJ0Qmb7';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
+declare global {
+  interface Window {
+    fbq: any;
+  }
+}
+
 const DONOR_NAMES = [
   'Henrique', 'Ana', 'Carlos', 'Mariana', 'João', 'Beatriz', 'Lucas', 'Fernanda', 
   'Pedro', 'Juliana', 'Rafael', 'Camila', 'Bruno', 'Amanda', 'Thiago', 'Letícia', 
@@ -819,6 +825,14 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
         ]);
 
       if (error) throw error;
+      
+      // Disparar evento do Pixel do Facebook (InitiateCheckout)
+      if (typeof window !== 'undefined' && window.fbq) {
+        window.fbq('track', 'InitiateCheckout', {
+          value: Number(value),
+          currency: 'BRL'
+        });
+      }
       
     } catch (error) {
       console.error('Erro ao salvar cadastro no Supabase:', error);
