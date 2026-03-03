@@ -792,6 +792,7 @@ function AdminPage({ onBack }: { onBack: () => void }) {
 
 function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValue: string }) {
   const [pixGenerated, setPixGenerated] = useState(false);
+  const [pixCode, setPixCode] = useState('');
   const [value, setValue] = useState(initialValue);
   const [copied, setCopied] = useState(false);
   
@@ -802,7 +803,7 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText('00020101021126580014br.gov.bcb.pix013659152353-c62f-42d1-aaff-6c7538b71ae95204000053039865802BR5918PAULO R DA S SOUSA6008TRINDADE62070503***63045F6E');
+    navigator.clipboard.writeText(pixCode);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
   };
@@ -833,13 +834,37 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
           currency: 'BRL'
         });
       }
+
+      // Gerar PIX na Sync Pay
+      const pixResponse = await fetch('/api/pix', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: value,
+          name: nome,
+          cpf: cpf,
+          phone: telefone
+        })
+      });
+
+      const pixData = await pixResponse.json();
+
+      if (!pixResponse.ok) {
+        throw new Error(pixData.error || 'Erro ao gerar PIX');
+      }
+
+      if (pixData.pix_code) {
+        setPixCode(pixData.pix_code);
+        setPixGenerated(true);
+      } else {
+        throw new Error('Código PIX não retornado');
+      }
       
     } catch (error) {
-      console.error('Erro ao salvar cadastro no Supabase:', error);
-      alert('Houve um erro ao salvar seu cadastro. Por favor, tente novamente.');
+      console.error('Erro ao processar:', error);
+      alert('Houve um erro ao gerar seu PIX. Por favor, tente novamente.');
     } finally {
       setIsLoading(false);
-      setPixGenerated(true);
     }
   };
 
@@ -937,12 +962,12 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
               </div>
 
               <div className="p-4 bg-white border-2 border-green-100 rounded-2xl shadow-sm">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126580014br.gov.bcb.pix013659152353-c62f-42d1-aaff-6c7538b71ae95204000053039865802BR5918PAULO%20R%20DA%20S%20SOUSA6008TRINDADE62070503***63045F6E" alt="QR Code PIX" className="w-48 h-48 rounded-lg" referrerPolicy="no-referrer" />
+                <img src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixCode)}`} alt="QR Code PIX" className="w-48 h-48 rounded-lg" referrerPolicy="no-referrer" />
               </div>
               
               <div className="w-full space-y-3">
                 <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center font-mono text-gray-800 font-bold break-all text-sm">
-                  00020101021126580014br.gov.bcb.pix013659152353-c62f-42d1-aaff-6c7538b71ae95204000053039865802BR5918PAULO R DA S SOUSA6008TRINDADE62070503***63045F6E
+                  {pixCode}
                 </div>
                 <button 
                   onClick={handleCopy}
