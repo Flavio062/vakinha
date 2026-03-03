@@ -14,45 +14,6 @@ async function startServer() {
   app.use(express.json());
 
   // API routes FIRST
-  app.post("/api/pix", async (req, res) => {
-    try {
-      const { amount, name, cpf, email, phone } = req.body;
-      const token = '8cb6a372-6b5a-47dc-a8cd-378176c53786';
-
-      const response = await fetch('https://api.syncpayments.com.br/api/partner/v1/cash-in', {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          amount: Number(amount),
-          description: "Doação SOS Minas Gerais",
-          webhook_url: "https://seusite.com/webhook",
-          client: {
-            name: name || "Doador",
-            cpf: cpf ? cpf.replace(/\D/g, '') : "00000000000",
-            email: email || "doador@email.com",
-            phone: phone ? phone.replace(/\D/g, '') : "00000000000"
-          }
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        console.error('Erro SyncPay:', data);
-        return res.status(response.status).json({ error: 'Erro ao gerar PIX na SyncPay', details: data });
-      }
-
-      res.json(data);
-    } catch (error) {
-      console.error('Erro interno:', error);
-      res.status(500).json({ error: 'Erro interno do servidor' });
-    }
-  });
-
   app.post("/api/cadastro", (req, res) => {
     try {
       const { nome, cpf, telefone, valor } = req.body;
