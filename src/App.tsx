@@ -3,7 +3,7 @@ import { Search, Heart, Share, ShieldCheck, Copy, Check, Menu, X, MessageCircle,
 import { createClient } from '@supabase/supabase-js';
 
 // Inicializando o Supabase com as credenciais fornecidas
-const supabaseUrl = 'https://fcuednydkryzgrwjftqa.supabase.co';
+const supabaseUrl = 'https://fcuednydkryzgrwjftqa.supabase.co'; // Preservando a URL original, pois não foi enviada uma nova
 const supabaseKey = 'sb_publishable_kzW1v7G3ZrhjntXEQO-T2g__AJ0Qmb7';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -812,8 +812,8 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
     
     setIsLoading(true);
     try {
-      // Salvando no banco de dados Supabase
-      const { error } = await supabase
+      // 1. Salvar no banco de dados Supabase
+      const { error: dbError } = await supabase
         .from('cadastros')
         .insert([
           { 
@@ -824,19 +824,41 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
           }
         ]);
 
-      if (error) throw error;
+      if (dbError) throw dbError;
       
-      // Disparar evento do Pixel do Facebook (InitiateCheckout)
+      // 2. Disparar evento do Pixel do Facebook (InitiateCheckout)
       if (typeof window !== 'undefined' && window.fbq) {
         window.fbq('track', 'InitiateCheckout', {
           value: Number(value),
           currency: 'BRL'
         });
       }
+
+      // 3. Gerar PIX via Sync Pay
+      const clientId = 'e4f27a05-1452-4122-8744-99cb70a752cf';
+      const clientSecret = '8cb6a372-6b5a-47dc-a8cd-378176c53786';
+      
+      // Como não temos a documentação exata, vamos simular o tempo de resposta
+      // e usar um QR Code estático temporário até termos o endpoint correto
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Quando tivermos a doc, o código será algo como:
+      /*
+      const authRes = await fetch('https://api.syncpayments.com.br/auth', { ... });
+      const { token } = await authRes.json();
+      
+      const pixRes = await fetch('https://api.syncpayments.com.br/v1/pix', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ value, name: nome, document: cpf })
+      });
+      const pixData = await pixRes.json();
+      setPixCode(pixData.copy_paste_code);
+      */
       
     } catch (error) {
-      console.error('Erro ao salvar cadastro no Supabase:', error);
-      alert('Houve um erro ao salvar seu cadastro. Por favor, tente novamente.');
+      console.error('Erro ao processar:', error);
+      alert('Houve um erro ao gerar seu PIX. Por favor, tente novamente.');
     } finally {
       setIsLoading(false);
       setPixGenerated(true);
