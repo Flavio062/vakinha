@@ -131,15 +131,6 @@ export default function App() {
           <div className="flex items-center">
             <img src="https://seeklogo.com/images/V/vakinha-logo-88066E3580-seeklogo.com.png" alt="Vakinha Logo" className="h-8" referrerPolicy="no-referrer" />
           </div>
-          
-          <div className="flex items-center gap-4">
-            <button className="text-green-500 p-1 hover:bg-gray-50 rounded-full transition-colors">
-              <Search size={24} />
-            </button>
-            <div className="w-10 h-10 bg-[#00a8c6] rounded-full flex items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-[#008ba3] transition-colors">
-              FH
-            </div>
-          </div>
         </div>
       </header>
 
@@ -839,18 +830,11 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
       {/* Header Fixo Checkout */}
       <header className="bg-white shadow-sm sticky top-0 z-50 w-full border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <div className="flex items-center">
-            <img src="https://seeklogo.com/images/V/vakinha-logo-88066E3580-seeklogo.com.png" alt="Vakinha Logo" className="h-8" referrerPolicy="no-referrer" />
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <button className="text-[#1cb977] p-1 hover:bg-gray-50 rounded-full transition-colors">
-              <Search size={24} />
-            </button>
-            <div className="w-10 h-10 bg-[#00a8c6] rounded-full flex items-center justify-center text-white font-bold text-sm cursor-pointer hover:bg-[#008ba3] transition-colors">
-              FH
-            </div>
-          </div>
+          <button onClick={onBack} className="p-2 -ml-2 text-gray-600 hover:bg-gray-100 rounded-full transition-colors">
+            <ArrowLeft size={24} />
+          </button>
+          <img src="https://seeklogo.com/images/V/vakinha-logo-88066E3580-seeklogo.com.png" alt="Vakinha Logo" className="h-8" referrerPolicy="no-referrer" />
+          <div className="w-10"></div> {/* Spacer para centralizar a logo */}
         </div>
       </header>
 
@@ -866,10 +850,6 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
 
         {!pixGenerated ? (
           <div className="space-y-6">
-            <div className="text-sm text-gray-800">
-              <span className="font-bold">Olá, Flávio Henrique.</span> Não é você? <a href="#" className="text-blue-600 underline">Clique aqui</a>
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-bold text-gray-800 mb-2">Telefone (WhatsApp)</label>
@@ -897,7 +877,7 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
                 <label className="block text-sm font-bold text-gray-800 mb-2">Nome completo</label>
                 <input 
                   type="text" 
-                  placeholder="Flávio Henrique" 
+                  placeholder="Digite seu nome completo" 
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
                   className="w-full px-4 py-3 border border-gray-300 rounded-md focus:ring-1 focus:ring-[#1cb977] focus:border-[#1cb977] outline-none text-gray-900 transition-colors" 
@@ -924,10 +904,6 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
             <div>
               <label className="block text-sm font-bold text-gray-800 mb-3">Forma de pagamento</label>
               <div className="flex gap-3">
-                <div className="flex-1 flex items-center justify-center gap-2 border border-[#1cb977] rounded-md py-3 px-4 cursor-pointer text-[#1cb977]">
-                  <div className="w-4 h-4 rounded-full border border-[#1cb977]"></div>
-                  <span className="font-medium text-sm">Cartão de crédito</span>
-                </div>
                 <div className="flex-1 flex items-center justify-center gap-2 bg-[#1cb977] rounded-md py-3 px-4 cursor-pointer text-white">
                   <div className="w-4 h-4 rounded-full border-2 border-white flex items-center justify-center">
                     <div className="w-2 h-2 bg-white rounded-full"></div>
@@ -1053,27 +1029,6 @@ function PaymentPage({ onBack, initialValue }: { onBack: () => void, initialValu
             </div>
 
             <a href="#" className="text-sm text-gray-600 underline">Tudo certo, já paguei!</a>
-
-            <div className="w-full text-left mt-8">
-              <h3 className="font-bold text-gray-800 uppercase text-sm mb-2">NÃO CONSEGUIU USAR O CÓDIGO? DOE USANDO A CHAVE PIX!</h3>
-              <p className="text-sm text-gray-600 mb-4">Copie a chave PIX exclusiva da vaquinha e transfira o valor via PIX, usando o aplicativo do seu banco.</p>
-              
-              <div className="flex items-center border border-gray-300 rounded-md overflow-hidden">
-                <div className="flex-1 p-3 text-sm text-gray-800 bg-white">
-                  5951671@vakinha.com.br
-                </div>
-                <button 
-                  onClick={() => {
-                    navigator.clipboard.writeText('5951671@vakinha.com.br');
-                    setCopied(true);
-                    setTimeout(() => setCopied(false), 2000);
-                  }}
-                  className="p-3 bg-white border-l border-gray-300 hover:bg-gray-50 text-gray-600 transition-colors"
-                >
-                  <Copy size={20} />
-                </button>
-              </div>
-            </div>
 
             <div className="w-full bg-gray-100 p-6 rounded-lg flex flex-col items-center mt-6">
               <img src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=00020101021126580014br.gov.bcb.pix013659152353-c62f-42d1-aaff-6c7538b71ae95204000053039865802BR5918PAULO%20R%20DA%20S%20SOUSA6008TRINDADE62070503***63045F6E" alt="QR Code PIX" className="w-48 h-48 mb-4 mix-blend-multiply" referrerPolicy="no-referrer" />
